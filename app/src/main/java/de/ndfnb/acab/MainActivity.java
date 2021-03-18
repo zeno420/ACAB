@@ -7,14 +7,20 @@ import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentManager;
 
 import android.view.View;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
+
+
+
 
 public class MainActivity extends AppCompatActivity {
 
+    ListView listview;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,12 +28,20 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        listview = (ListView) findViewById(R.id.listview);
+        listview.setAdapter(new ContactAdapter(this, new String[] { "Zeno",
+                "Nico", "Irgend ein Analphabet", "Damit mein ich Zeno", "LOL" }));
+        getSupportActionBar().setTitle("All Chats are Beautiful");
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                FragmentManager fm = getSupportFragmentManager();
+                AddContactDialogFragment addContactDialogFragment = AddContactDialogFragment.newInstance("Some Title");
+                addContactDialogFragment.show(fm, "add_contact_dialog_fragment");
+
             }
         });
     }
