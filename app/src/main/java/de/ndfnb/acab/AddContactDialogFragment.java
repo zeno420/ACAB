@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,19 +12,32 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.ViewModelProvider;
+
+import org.json.JSONObject;
+
+import java.util.concurrent.ExecutionException;
 
 import de.ndfnb.acab.R;
+import de.ndfnb.acab.data.LoginDataSource;
+import de.ndfnb.acab.APITasks.AsyncResponse;
+import de.ndfnb.acab.data.LoginRepository;
+import de.ndfnb.acab.ui.login.LoginViewModel;
+import de.ndfnb.acab.ui.login.LoginViewModelFactory;
 
-public class AddContactDialogFragment extends DialogFragment {
+public class AddContactDialogFragment extends DialogFragment implements AsyncResponse {
     private EditText mEditText;
+    private LoginRepository loginRepository;
 
-    public static AddContactDialogFragment newInstance(String title) {
+    public static AddContactDialogFragment newInstance(String title, LoginRepository loginRepository) {
         AddContactDialogFragment frag = new AddContactDialogFragment();
         Bundle args = new Bundle();
         args.putString("title", title);
+        args.putParcelable("loginRepository", (Parcelable) loginRepository);
         frag.setArguments(args);
         return frag;
     }
@@ -35,6 +49,14 @@ public class AddContactDialogFragment extends DialogFragment {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.loginRepository = getArguments().getParcelable("loginRepository");
+
+
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         int width = 800;
@@ -42,6 +64,7 @@ public class AddContactDialogFragment extends DialogFragment {
         getDialog().getWindow().setLayout(width, height);
 
         View view = inflater.inflate(R.layout.add_contact_dialog_fragment, container);
+        TextView nameTextView = (TextView) view.findViewById(R.id.username_input);
         Button addBtn = (Button) view.findViewById(R.id.add_contact_add_button);
         Button cancelBtn = (Button) view.findViewById(R.id.add_contact_cancel_button);
 
@@ -54,7 +77,19 @@ public class AddContactDialogFragment extends DialogFragment {
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Handle add contact
+                //TODO Test some methods
+                //Eingabe nehmen und ein getRoute aufrufen
+                String name = nameTextView.getText().toString();
+                String jwtToken = loginRepository.getLoggedInUser().getJwtToken();
+                try {
+                    JSONObject result = new APITasks(AddContactDialogFragment.this).execute("get_route", jwtToken, name).get();
+                    System.out.println(result);
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                //String code = result.getString("code");
             }
         });
         return view;
@@ -76,6 +111,8 @@ public class AddContactDialogFragment extends DialogFragment {
     }
 
 
-
-
+    @Override
+    public JSONObject processFinish(JSONObject output) {
+        return output;
+    }
 }

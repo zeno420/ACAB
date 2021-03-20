@@ -15,13 +15,15 @@ import java.util.Arrays;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import de.ndfnb.acab.data.model.LoggedInUser;
+
 
 public class APITasks extends AsyncTask<String, Void, JSONObject> {
 
     public AsyncResponse delegate = null;
 
     public interface AsyncResponse {
-        void processFinish(JSONObject output);
+        JSONObject processFinish(JSONObject output);
     }
 
     public APITasks(AsyncResponse delegate) {
@@ -36,8 +38,9 @@ public class APITasks extends AsyncTask<String, Void, JSONObject> {
     }
 
     protected JSONObject doInBackground(String... params) {
+        //TODO für jeden Methodenaufruf noch die HTTP Status Codes abfragen für Fehlerbehandlung
         String route = params[0];
-        String[] args = Arrays.copyOfRange(params, 1, params.length - 1);
+        String[] args = Arrays.copyOfRange(params, 1, params.length);
         String result = "";
 
         if (route == "auth_signin") {
@@ -110,12 +113,11 @@ public class APITasks extends AsyncTask<String, Void, JSONObject> {
 
 
     private String getRouteByName(String jwtToken, String name) throws IOException {
-
+        //TODO return 500 beheben
         URL url = new URL("https://h2896907.stratoserver.net/registry?name=" + name);
         HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
         con.setRequestMethod("GET");
         con.setRequestProperty("x-access-token", jwtToken);
-        con.setRequestProperty("Content-Type", "application/json");
         con.setDoOutput(true);
         String result = "";
 

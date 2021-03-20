@@ -9,25 +9,28 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 
+import android.os.Parcelable;
 import android.view.View;
 
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 
-
+import de.ndfnb.acab.data.LoginRepository;
+import de.ndfnb.acab.ui.login.LoginViewModel;
 
 
 public class MainActivity extends AppCompatActivity {
 
     ListView listview;
+    LoginRepository loginRepository;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        loginRepository = getIntent().getParcelableExtra("loginRepository");
         listview = (ListView) findViewById(R.id.listview);
         listview.setAdapter(new ContactAdapter(this, new String[] { "Zeno",
                 "Nico", "Irgend ein Analphabet", "Damit mein ich Zeno", "LOL" }));
@@ -39,7 +42,8 @@ public class MainActivity extends AppCompatActivity {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 FragmentManager fm = getSupportFragmentManager();
-                AddContactDialogFragment addContactDialogFragment = AddContactDialogFragment.newInstance("Some Title");
+
+                AddContactDialogFragment addContactDialogFragment = AddContactDialogFragment.newInstance("Some Title", loginRepository);
                 addContactDialogFragment.show(fm, "add_contact_dialog_fragment");
 
             }
