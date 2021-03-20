@@ -12,7 +12,6 @@ import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.text.Editable;
-import android.text.PrecomputedText;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
@@ -23,11 +22,18 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import de.ndfnb.acab.LoginAsyncTask;
-import de.ndfnb.acab.R;
-import de.ndfnb.acab.LoginAsyncTask.AsyncResponse;
+import org.json.JSONObject;
 
-public class LoginActivity extends AppCompatActivity implements AsyncResponse{
+import java.io.IOException;
+
+import de.ndfnb.acab.APITasks;
+import de.ndfnb.acab.R;
+import de.ndfnb.acab.APITasks.AsyncResponse;
+import de.ndfnb.acab.data.Result;
+import de.ndfnb.acab.data.model.LoggedInUser;
+
+public class LoginActivity extends AppCompatActivity implements AsyncResponse {
+
     private LoginViewModel loginViewModel;
 
     @Override
@@ -115,7 +121,7 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
                 loadingProgressBar.setVisibility(View.VISIBLE);
                 String username = usernameEditText.getText().toString();
                 String password =  passwordEditText.getText().toString();
-                new LoginAsyncTask(LoginActivity.this).execute(username, password);
+                new APITasks(LoginActivity.this).execute(username, password);
 
                 /*loginViewModel.login(usernameEditText.getText().toString(),
                         passwordEditText.getText().toString());*/
@@ -126,9 +132,13 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
 
     //this override the implemented method from AsyncResponse
     @Override
-    public void processFinish(String output){
-       String result = output;
-       System.out.println(result);
+    public void processFinish(JSONObject output){
+        JSONObject result = output;
+        LoggedInUser user;
+        try {
+            user = new LoggedInUser(java.util.UUID.randomUUID().toString(), result.getString("name"), result.getString("accessToken"));
+        } catch (Exception e) {
+        }
     }
 
 

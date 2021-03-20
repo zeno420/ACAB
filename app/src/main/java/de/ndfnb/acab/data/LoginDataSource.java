@@ -1,7 +1,6 @@
 package de.ndfnb.acab.data;
 
 
-import de.ndfnb.acab.LoginAsyncTask;
 import de.ndfnb.acab.data.model.LoggedInUser;
 
 import java.io.IOException;
@@ -11,8 +10,7 @@ import java.io.IOException;
  */
 public class LoginDataSource{
 
-    String result = "";
-    public Result<LoggedInUser> login(String username, String password) {
+    public Result<LoggedInUser> login(String name,  String jwtToken) {
         LoggedInUser user;
         try {
 
