@@ -47,6 +47,7 @@ public class LoginActivity extends AppCompatActivity {
                 String username = usernameEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
 
+                //TODO login legt user an auch wenn falsch auth, fehlverhalten
                 loginRepository.login(username, password);
                 loggedInUser = loginRepository.getLoggedInUser();
                 Intent intent = new Intent(getBaseContext(), MainActivity.class);

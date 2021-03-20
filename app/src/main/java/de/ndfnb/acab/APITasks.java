@@ -113,12 +113,10 @@ public class APITasks extends AsyncTask<String, Void, JSONObject> {
 
 
     private String getRouteByName(String jwtToken, String name) throws IOException {
-        //TODO return 500 beheben
         URL url = new URL("https://h2896907.stratoserver.net/registry?name=" + name);
         HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
         con.setRequestMethod("GET");
         con.setRequestProperty("x-access-token", jwtToken);
-        con.setDoOutput(true);
         String result = "";
 
         int responseCode = con.getResponseCode();
