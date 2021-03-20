@@ -61,10 +61,12 @@ public class LoginAsyncTask extends AsyncTask<String, Void, String> {
         requestBody.put("passwd", password);
         final String requestBodyString = requestBody.toString();
 
+
+
         try (OutputStream os = con.getOutputStream()) {
-            os.write(requestBody.toString().getBytes("ascii"));
+            os.write(requestBody.toString().getBytes("UTF-8"));
         }
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(con.getErrorStream(),"ascii"))) {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(),"UTF-8"))) {
             StringBuilder response = new StringBuilder();
             String responseLine = null;
             while ((responseLine = br.readLine()) != null) {
