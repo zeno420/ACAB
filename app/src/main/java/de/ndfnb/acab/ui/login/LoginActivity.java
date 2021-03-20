@@ -12,6 +12,7 @@ import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.text.Editable;
+import android.text.PrecomputedText;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
@@ -22,21 +23,20 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import de.ndfnb.acab.LoginAsyncTask;
 import de.ndfnb.acab.R;
-import de.ndfnb.acab.ui.login.LoginViewModel;
-import de.ndfnb.acab.ui.login.LoginViewModelFactory;
+import de.ndfnb.acab.LoginAsyncTask.AsyncResponse;
 
-public class LoginActivity extends AppCompatActivity {
-
+public class LoginActivity extends AppCompatActivity implements AsyncResponse{
     private LoginViewModel loginViewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        //execute the async task
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
                 .get(LoginViewModel.class);
-
         final EditText usernameEditText = findViewById(R.id.username);
         final EditText passwordEditText = findViewById(R.id.password);
         final Button loginButton = findViewById(R.id.login);
@@ -113,11 +113,28 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 loadingProgressBar.setVisibility(View.VISIBLE);
-                loginViewModel.login(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
+                String username = usernameEditText.getText().toString();
+                String password =  passwordEditText.getText().toString();
+                new LoginAsyncTask(LoginActivity.this).execute(username, password);
+
+                /*loginViewModel.login(usernameEditText.getText().toString(),
+                        passwordEditText.getText().toString());*/
             }
         });
+
     }
+
+    //this override the implemented method from AsyncResponse
+    @Override
+    public void processFinish(String output){
+       String result = output;
+       System.out.println(result);
+    }
+
+
+
+
+
 
     private void updateUiWithUser(LoggedInUserView model) {
         String welcome = getString(R.string.welcome) + model.getDisplayName();
