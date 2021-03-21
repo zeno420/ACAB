@@ -12,6 +12,8 @@ import android.os.IBinder;
 
 import androidx.annotation.Nullable;
 
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.DataInputStream;
@@ -25,7 +27,6 @@ import java.net.Socket;
 import java.util.concurrent.atomic.AtomicBoolean;
 // Declare the interface. The method messageReceived(String message) will must be implemented
 // in the implementing class
-
 //TODO das ist ein BackgroundService um die routen immer aktuell zu halten
 class TCPServerService extends Service {
     interface OnMessageReceived {
@@ -134,27 +135,5 @@ class TCPServerService extends Service {
     /**
      * A simple task for sending messages across the network.
      */
-    public class TCPMessageSendTask extends AsyncTask<Void, Void, Void> {
 
-        private PrintWriter out;
-        private String message;
-
-        public TCPMessageSendTask(PrintWriter out, String message) {
-            this.out = out;
-            this.message = message;
-        }
-
-        @Override
-        protected Void doInBackground(Void... arg0) {
-            if (out != null && !out.checkError()) {
-                try {
-                    out.println(message);
-                    out.flush();
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                }
-            }
-            return null;
-        }
-    }
 }
