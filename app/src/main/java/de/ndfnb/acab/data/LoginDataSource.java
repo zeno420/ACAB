@@ -3,13 +3,12 @@ package de.ndfnb.acab.data;
 
 import org.json.JSONObject;
 
-import de.ndfnb.acab.APITasks;
+import de.ndfnb.acab.tasks.APITasks;
 import de.ndfnb.acab.data.model.LoggedInUser;
-import de.ndfnb.acab.ui.login.LoginActivity;
 
 import java.io.IOException;
 
-import de.ndfnb.acab.APITasks.AsyncResponse;
+import de.ndfnb.acab.tasks.APITasks.AsyncResponse;
 
 /**
  * Class that handles authentication w/ login credentials and retrieves user information.

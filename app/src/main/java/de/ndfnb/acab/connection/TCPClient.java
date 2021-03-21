@@ -1,24 +1,31 @@
-package de.ndfnb.acab;
+package de.ndfnb.acab.connection;
 
 import android.content.Context;
-import android.os.AsyncTask;
-import android.util.Log;
-
 
 import org.json.JSONObject;
 
-import java.io.*;
-import java.net.Socket;
-import java.net.UnknownHostException;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.security.KeyStore;
+import java.util.concurrent.ExecutionException;
 
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 
-import de.ndfnb.acab.MainActivity;
 import de.ndfnb.acab.R;
-import de.ndfnb.acab.APITasks.AsyncResponse;
-public class TCPClient implements TCPClient.TCPMessageSendTask.AsyncResponse {
+import de.ndfnb.acab.tasks.TCPMessageSendTask;
+import de.ndfnb.acab.tasks.TCPMessageSendTask.AsyncResponse;
+
+
+/**
+ * TCPClient takes the TCP socket and allow to send and receive messages
+ * This class is always called by ConnectionManagerTask
+ */
+public class TCPClient implements AsyncResponse {
 
     public SSLSocket socket = null;
 
@@ -37,9 +44,10 @@ public class TCPClient implements TCPClient.TCPMessageSendTask.AsyncResponse {
     /**
      * Constructor of the class. OnMessagedReceived listens for the messages received from server
      */
-    public TCPClient(String host, int port, OnMessageReceived listener) {
+    public TCPClient(String host, int port, OnMessageReceived listener, Context context) {
         this.host = host;
         this.port = port;
+        this.context = context;
         mMessageListener = listener;
     }
 
@@ -48,10 +56,9 @@ public class TCPClient implements TCPClient.TCPMessageSendTask.AsyncResponse {
      *
      * @param message text entered by client
      */
-    public void sendMessage(String message) {
+    public void sendMessage(String message) throws ExecutionException, InterruptedException {
         // As of Android 4.0 we have to send to network in another thread...
-        TCPMessageSendTask sender = new TCPMessageSendTask(TCPClient.this, out, message);
-        sender.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        JSONObject result = new TCPMessageSendTask(TCPClient.this, out, message).execute(message).get();
     }
 
     public void stopClient() {
@@ -114,44 +121,6 @@ public class TCPClient implements TCPClient.TCPMessageSendTask.AsyncResponse {
         void messageReceived(String message);
     }
 
-    /**
-     * A simple task for sending messages across the network.
-     */
-    public static class TCPMessageSendTask extends AsyncTask<String, Void, JSONObject> {
-        private PrintWriter out;
-        private String message;
-
-        public AsyncResponse delegate = null;
-
-        public interface AsyncResponse {
-            JSONObject processFinish(JSONObject output);
-        }
 
 
-        protected void onPreExecute() {
-        }
-
-        protected void onPostExecute(JSONObject result) {
-            delegate.processFinish(result);
-        }
-
-        public TCPMessageSendTask(AsyncResponse delegate, PrintWriter out, String message) {
-            this.delegate = delegate;
-            this.out = out;
-            this.message = message;
-        }
-
-        @Override
-        protected JSONObject doInBackground(String... params) {
-            if (out != null && !out.checkError()) {
-                try {
-                    out.println(message);
-                    out.flush();
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                }
-            }
-            return null;
-        }
-    }
 }

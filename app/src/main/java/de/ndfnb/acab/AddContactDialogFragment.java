@@ -1,8 +1,5 @@
 package de.ndfnb.acab;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.LayoutInflater;
@@ -11,23 +8,18 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import org.json.JSONObject;
 
 import java.util.concurrent.ExecutionException;
 
-import de.ndfnb.acab.R;
-import de.ndfnb.acab.data.LoginDataSource;
-import de.ndfnb.acab.APITasks.AsyncResponse;
+import de.ndfnb.acab.tasks.APITasks;
+import de.ndfnb.acab.tasks.APITasks.AsyncResponse;
 import de.ndfnb.acab.data.LoginRepository;
-import de.ndfnb.acab.ui.login.LoginViewModel;
-import de.ndfnb.acab.ui.login.LoginViewModelFactory;
 
 public class AddContactDialogFragment extends DialogFragment implements AsyncResponse {
     private EditText mEditText;

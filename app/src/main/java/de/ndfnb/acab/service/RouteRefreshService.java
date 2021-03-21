@@ -1,4 +1,4 @@
-package de.ndfnb.acab;
+package de.ndfnb.acab.service;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -24,11 +24,22 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import de.ndfnb.acab.R;
+import de.ndfnb.acab.tasks.APITasks;
+import de.ndfnb.acab.tasks.APITasks.AsyncResponse;
+
 // Declare the interface. The method messageReceived(String message) will must be implemented
 // in the implementing class
 //TODO das ist ein BackgroundService um die routen immer aktuell zu halten
-class TCPServerService extends Service {
+class RouteRefreshService extends Service implements AsyncResponse {
+    @Override
+    public JSONObject processFinish(JSONObject output) {
+        return output;
+    }
+
     interface OnMessageReceived {
         void messageReceived(String message);
     }
@@ -45,7 +56,12 @@ class TCPServerService extends Service {
             Socket socket = null;
             mRun = true;
             try {
-                //TODO Server Port ändern
+                //TODO get route and compare to current
+                //if difference update new one
+                JSONObject result = new APITasks(RouteRefreshService.this).execute("update_route").get();
+
+
+                //TODO maybe background service to retrieve messages out of app.
                 serverSocket = new ServerSocket(8888);
                 while (working.get()) {
                     if (serverSocket != null) {
@@ -89,6 +105,8 @@ class TCPServerService extends Service {
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
             }
         }
 

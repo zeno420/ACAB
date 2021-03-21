@@ -29,7 +29,7 @@
             android:value="true" />
 
         <activity
-            android:name=".ChatActivity"
+            android:name=".ui.chat.ChatActivity"
             android:label="@string/title_activity_chat"></activity>
         <activity
             android:name=".ui.login.LoginActivity"

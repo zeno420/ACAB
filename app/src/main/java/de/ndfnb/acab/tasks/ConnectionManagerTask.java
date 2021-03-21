@@ -1,16 +1,19 @@
-package de.ndfnb.acab;
+package de.ndfnb.acab.tasks;
 
+import android.content.Context;
 import android.os.AsyncTask;
+
+import de.ndfnb.acab.connection.TCPClient;
 
 
 /**
  * This class handles the creation of the TCPClient and registers for progress (new data) from the server
- * Created by miles on 12/16/15.
  */
 public class ConnectionManagerTask extends AsyncTask<String, String, TCPClient> {
     public AsyncResponse delegate = null;
     public TCPClient mTcpClient;
     private String host;
+    private Context context;
     private int port;
 
 
@@ -22,9 +25,10 @@ public class ConnectionManagerTask extends AsyncTask<String, String, TCPClient> 
         delegate.processFinish(result);
     }
 
-    public ConnectionManagerTask(AsyncResponse delegate, String host, int port) {
+    public ConnectionManagerTask(AsyncResponse delegate, String host, int port, Context context) {
         this.host = host;
         this.port = port;
+        this.context = context;
         this.delegate = delegate;
     }
 
@@ -38,7 +42,7 @@ public class ConnectionManagerTask extends AsyncTask<String, String, TCPClient> 
     protected TCPClient doInBackground(String... message) {
 
         //Create a TCPClient (the actual socket builder)
-        mTcpClient = new TCPClient(host, port,
+        mTcpClient = new TCPClient(this.host, this.port,
                 new TCPClient.OnMessageReceived() {
                     @Override
                     //here the messageReceived method is implemented
@@ -46,7 +50,7 @@ public class ConnectionManagerTask extends AsyncTask<String, String, TCPClient> 
                         //this method calls the onProgressUpdate
                         publishProgress(message);
                     }
-                }
+                }, this.context
         );
         mTcpClient.run();
         return mTcpClient;
