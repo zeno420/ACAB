@@ -55,6 +55,8 @@ public class LoginRepository implements Parcelable {
         Result<LoggedInUser> result = dataSource.login(username, password);
         if (result instanceof Result.Success) {
             setLoggedInUser(((Result.Success<LoggedInUser>) result).getData());
+        } else {
+            return null;
         }
         return result;
     }

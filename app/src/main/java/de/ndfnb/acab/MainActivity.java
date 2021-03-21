@@ -15,22 +15,25 @@ import android.view.View;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import de.ndfnb.acab.data.LoginRepository;
-import de.ndfnb.acab.service.TCPServerService;
+import de.ndfnb.acab.service.RouteRefreshService;
 import de.ndfnb.acab.tasks.ConnectionManagerTask;
+import de.ndfnb.acab.ui.chat.ChatActivity;
 
 
 public class MainActivity extends AppCompatActivity {
 
     private ConnectionManagerTask connectionManager;
-    public static final String SERVER_IP = "" ;
+    public static final String SERVER_IP = "";
     public static final int SERVER_PORT = 1;
 
 
     ListView listview;
     LoginRepository loginRepository;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,16 +44,25 @@ public class MainActivity extends AppCompatActivity {
         listview = (ListView) findViewById(R.id.listview);
 
 
-
         //TODO Hier wird der TCPServerService gestartet
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(new Intent(getApplicationContext(), TCPServerService.class));
+            startForegroundService(new Intent(getApplicationContext(), RouteRefreshService.class));
         } else {
-            startService(new Intent(getApplicationContext(), TCPServerService.class));
+            startService(new Intent(getApplicationContext(), RouteRefreshService.class));
         }
 
-        listview.setAdapter(new ContactAdapter(this, new String[] { "Zeno",
-                "Nico", "Irgend ein Analphabet", "Damit mein ich Zeno", "LOL" }));
+        listview.setAdapter(new ContactAdapter(this, new String[]{"zeno420",
+                "Nico", "Irgend ein Analphabet", "Damit mein ich Zeno", "LOL"}));
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getBaseContext(), ChatActivity.class);
+                intent.putExtra("name", listview.getItemAtPosition(position).toString()); //)
+                intent.putExtra("loginRepository", loginRepository); //)
+                startActivity(intent);
+
+            }
+        });
         getSupportActionBar().setTitle("All Chats are Beautiful");
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

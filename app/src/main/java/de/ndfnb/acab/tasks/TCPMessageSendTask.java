@@ -14,9 +14,9 @@ public class TCPMessageSendTask extends AsyncTask<String, Void, JSONObject> {
     private PrintWriter out;
     private String message;
 
-    public AsyncResponse delegate = null;
+    public AsyncTCPMessageResponse delegate = null;
 
-    public interface AsyncResponse {
+    public interface AsyncTCPMessageResponse {
         JSONObject processFinish(JSONObject output);
     }
 
@@ -29,7 +29,7 @@ public class TCPMessageSendTask extends AsyncTask<String, Void, JSONObject> {
         delegate.processFinish(result);
     }
 
-    public TCPMessageSendTask(AsyncResponse delegate, PrintWriter out, String message) {
+    public TCPMessageSendTask(AsyncTCPMessageResponse delegate, PrintWriter out, String message) {
         this.delegate = delegate;
         this.out = out;
         this.message = message;

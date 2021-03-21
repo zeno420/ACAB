@@ -18,14 +18,14 @@ import javax.net.ssl.SSLSocketFactory;
 
 import de.ndfnb.acab.R;
 import de.ndfnb.acab.tasks.TCPMessageSendTask;
-import de.ndfnb.acab.tasks.TCPMessageSendTask.AsyncResponse;
+import de.ndfnb.acab.tasks.TCPMessageSendTask.AsyncTCPMessageResponse;
 
 
 /**
  * TCPClient takes the TCP socket and allow to send and receive messages
  * This class is always called by ConnectionManagerTask
  */
-public class TCPClient implements AsyncResponse {
+public class TCPClient implements AsyncTCPMessageResponse {
 
     public SSLSocket socket = null;
 
@@ -74,8 +74,8 @@ public class TCPClient implements AsyncResponse {
             KeyStore ks = KeyStore.getInstance("BKS");
             // Load the keystore file
             //TODO Key Store muss angelegt werden https://docs.wso2.com/display/EMM200/Generating+a+BKS+File+for+Android
-            InputStream keyin = context.getResources().openRawResource(R.raw.client_finished);
-            ks.load(keyin, keystorepass);
+            //InputStream keyin = context.getResources().openRawResource(R.raw.client_finished);
+            //ks.load(keyin, keystorepass);
 
             SSLSocketFactory sslsocketfactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
             socket = (SSLSocket) sslsocketfactory.createSocket(host, port);

@@ -10,14 +10,14 @@ import de.ndfnb.acab.connection.TCPClient;
  * This class handles the creation of the TCPClient and registers for progress (new data) from the server
  */
 public class ConnectionManagerTask extends AsyncTask<String, String, TCPClient> {
-    public AsyncResponse delegate = null;
+    public AsyncTCPClientResponse delegate = null;
     public TCPClient mTcpClient;
     private String host;
     private Context context;
     private int port;
 
 
-    public interface AsyncResponse {
+    public interface AsyncTCPClientResponse {
         TCPClient processFinish(TCPClient output);
     }
     protected void onPreExecute() { }
@@ -25,7 +25,7 @@ public class ConnectionManagerTask extends AsyncTask<String, String, TCPClient> 
         delegate.processFinish(result);
     }
 
-    public ConnectionManagerTask(AsyncResponse delegate, String host, int port, Context context) {
+    public ConnectionManagerTask(AsyncTCPClientResponse delegate, String host, int port, Context context) {
         this.host = host;
         this.port = port;
         this.context = context;
