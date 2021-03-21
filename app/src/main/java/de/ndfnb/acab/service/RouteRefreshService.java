@@ -61,7 +61,7 @@ public class RouteRefreshService extends Service implements AsyncResponse {
                 JSONObject result = new APITasks(RouteRefreshService.this).execute("update_route").get();
 
 
-                //TODO maybe background service to retrieve messages out of app.
+                //TODO maybe nebackground service to retrieve messages out of app.
                 serverSocket = new ServerSocket(8888);
                 while (working.get()) {
                     if (serverSocket != null) {

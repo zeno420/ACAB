@@ -16,7 +16,6 @@ import java.util.Arrays;
 import javax.net.ssl.HttpsURLConnection;
 
 
-
 public class APITasks extends AsyncTask<String, Void, JSONObject> {
 
     public AsyncResponse delegate = null;
@@ -37,7 +36,6 @@ public class APITasks extends AsyncTask<String, Void, JSONObject> {
     }
 
     protected JSONObject doInBackground(String... params) {
-        //TODO für jeden Methodenaufruf noch die HTTP Status Codes abfragen für Fehlerbehandlung
         String route = params[0];
         String[] args = Arrays.copyOfRange(params, 1, params.length);
         String result = "";
@@ -51,13 +49,13 @@ public class APITasks extends AsyncTask<String, Void, JSONObject> {
         } else if (route == "get_route") {
             try {
 
-                result = this.getRouteByName(args[0],args[1]);
+                result = this.getRouteByName(args[0], args[1]);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } else if (route == "update_route") {
             try {
-                result = this.updateRoute(args[0],args[1]);
+                result = this.updateRoute(args[0], args[1]);
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
             }
@@ -72,7 +70,7 @@ public class APITasks extends AsyncTask<String, Void, JSONObject> {
         }
         JSONObject resultJSON = null;
         try {
-          resultJSON = new JSONObject(result);
+            resultJSON = new JSONObject(result);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -93,21 +91,25 @@ public class APITasks extends AsyncTask<String, Void, JSONObject> {
         final String requestBodyString = requestBody.toString();
 
 
-        try (OutputStream os = con.getOutputStream()) {
-            os.write(requestBody.toString().getBytes("UTF-8"));
-        }
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"))) {
-            StringBuilder response = new StringBuilder();
-            String responseLine = null;
-            while ((responseLine = br.readLine()) != null) {
-                response.append(responseLine.trim());
+        int responseCode = con.getResponseCode();
+        if (responseCode == HttpsURLConnection.HTTP_OK) { // success
+            try (OutputStream os = con.getOutputStream()) {
+                os.write(requestBody.toString().getBytes("UTF-8"));
             }
-            System.out.println(response.toString());
-            result = response.toString();
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"))) {
+                StringBuilder response = new StringBuilder();
+                String responseLine = null;
+                while ((responseLine = br.readLine()) != null) {
+                    response.append(responseLine.trim());
+                }
+                System.out.println(response.toString());
+                result = response.toString();
 
-            return result;
+                return result;
+            }
+        } else {
+            return null;
         }
-
     }
 
 
@@ -130,14 +132,14 @@ public class APITasks extends AsyncTask<String, Void, JSONObject> {
             }
             in.close();
             result = response.toString();
-
             // print result
             System.out.println(response.toString());
+            return result;
         } else {
-            System.out.println("GET request not worked");
+            return null;
         }
 
-        return result;
+
     }
 
 
@@ -152,20 +154,24 @@ public class APITasks extends AsyncTask<String, Void, JSONObject> {
         requestBody.put("passwd", password);
         final String requestBodyString = requestBody.toString();
 
-
-        try (OutputStream os = con.getOutputStream()) {
-            os.write(requestBody.toString().getBytes("UTF-8"));
-        }
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"))) {
-            StringBuilder response = new StringBuilder();
-            String responseLine = null;
-            while ((responseLine = br.readLine()) != null) {
-                response.append(responseLine.trim());
+        int responseCode = con.getResponseCode();
+        if (responseCode == HttpsURLConnection.HTTP_OK) { // success
+            try (OutputStream os = con.getOutputStream()) {
+                os.write(requestBody.toString().getBytes("UTF-8"));
             }
-            System.out.println(response.toString());
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"))) {
+                StringBuilder response = new StringBuilder();
+                String responseLine = null;
+                while ((responseLine = br.readLine()) != null) {
+                    response.append(responseLine.trim());
+                }
+                System.out.println(response.toString());
 
 
-            return response.toString();
+                return response.toString();
+            }
+        } else {
+            return null;
         }
 
     }
@@ -183,22 +189,25 @@ public class APITasks extends AsyncTask<String, Void, JSONObject> {
         requestBody.put("passwd", password);
         final String requestBodyString = requestBody.toString();
 
-
-        try (OutputStream os = con.getOutputStream()) {
-            os.write(requestBody.toString().getBytes("UTF-8"));
-        }
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"))) {
-            StringBuilder response = new StringBuilder();
-            String responseLine = null;
-            while ((responseLine = br.readLine()) != null) {
-                response.append(responseLine.trim());
+        int responseCode = con.getResponseCode();
+        if (responseCode == HttpsURLConnection.HTTP_OK) { // success
+            try (OutputStream os = con.getOutputStream()) {
+                os.write(requestBody.toString().getBytes("UTF-8"));
             }
-            System.out.println(response.toString());
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"))) {
+                StringBuilder response = new StringBuilder();
+                String responseLine = null;
+                while ((responseLine = br.readLine()) != null) {
+                    response.append(responseLine.trim());
+                }
+                System.out.println(response.toString());
 
 
-            return response.toString();
+                return response.toString();
+            }
+        } else {
+            return null;
         }
-
     }
 
 
