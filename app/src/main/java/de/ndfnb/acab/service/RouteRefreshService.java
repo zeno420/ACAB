@@ -7,7 +7,6 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.IBinder;
 
 import androidx.annotation.Nullable;
@@ -16,8 +15,6 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -29,12 +26,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import de.ndfnb.acab.R;
 import de.ndfnb.acab.tasks.APITasks;
-import de.ndfnb.acab.tasks.APITasks.AsyncResponse;
+import de.ndfnb.acab.tasks.APITasks.AsyncAPIResponse;
 
 // Declare the interface. The method messageReceived(String message) will must be implemented
 // in the implementing class
 //TODO das ist ein BackgroundService um die routen immer aktuell zu halten
-public class RouteRefreshService extends Service implements AsyncResponse {
+public class RouteRefreshService extends Service implements AsyncAPIResponse {
     @Override
     public JSONObject processFinish(JSONObject output) {
         return output;

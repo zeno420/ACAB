@@ -18,8 +18,8 @@ import de.ndfnb.acab.tasks.ConnectionManagerTask;
 import de.ndfnb.acab.tasks.ConnectionManagerTask.AsyncTCPClientResponse;
 import de.ndfnb.acab.R;
 import de.ndfnb.acab.connection.TCPClient;
-import de.ndfnb.acab.tasks.APITasks.AsyncResponse;
-public class ChatActivity extends AppCompatActivity implements AsyncResponse, AsyncTCPClientResponse {
+import de.ndfnb.acab.tasks.APITasks.AsyncAPIResponse;
+public class ChatActivity extends AppCompatActivity implements AsyncAPIResponse, AsyncTCPClientResponse {
     private TextView mTextView;
     private TCPClient tcpClient;
     private LoginRepository loginRepository;

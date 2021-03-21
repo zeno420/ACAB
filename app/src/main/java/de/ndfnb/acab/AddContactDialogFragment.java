@@ -18,10 +18,10 @@ import org.json.JSONObject;
 import java.util.concurrent.ExecutionException;
 
 import de.ndfnb.acab.tasks.APITasks;
-import de.ndfnb.acab.tasks.APITasks.AsyncResponse;
+import de.ndfnb.acab.tasks.APITasks.AsyncAPIResponse;
 import de.ndfnb.acab.data.LoginRepository;
 
-public class AddContactDialogFragment extends DialogFragment implements AsyncResponse {
+public class AddContactDialogFragment extends DialogFragment implements AsyncAPIResponse {
     private EditText mEditText;
     private LoginRepository loginRepository;
 

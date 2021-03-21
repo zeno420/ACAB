@@ -18,13 +18,13 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class APITasks extends AsyncTask<String, Void, JSONObject> {
 
-    public AsyncResponse delegate = null;
+    public AsyncAPIResponse delegate = null;
 
-    public interface AsyncResponse {
+    public interface AsyncAPIResponse {
         JSONObject processFinish(JSONObject output);
     }
 
-    public APITasks(AsyncResponse delegate) {
+    public APITasks(AsyncAPIResponse delegate) {
         this.delegate = delegate;
     }
 
@@ -102,7 +102,6 @@ public class APITasks extends AsyncTask<String, Void, JSONObject> {
                 while ((responseLine = br.readLine()) != null) {
                     response.append(responseLine.trim());
                 }
-                System.out.println(response.toString());
                 result = response.toString();
 
                 return result;
@@ -132,8 +131,6 @@ public class APITasks extends AsyncTask<String, Void, JSONObject> {
             }
             in.close();
             result = response.toString();
-            // print result
-            System.out.println(response.toString());
             return result;
         } else {
             return null;

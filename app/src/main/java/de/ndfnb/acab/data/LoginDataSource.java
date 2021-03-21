@@ -8,12 +8,12 @@ import de.ndfnb.acab.data.model.LoggedInUser;
 
 import java.io.IOException;
 
-import de.ndfnb.acab.tasks.APITasks.AsyncResponse;
+import de.ndfnb.acab.tasks.APITasks.AsyncAPIResponse;
 
 /**
  * Class that handles authentication w/ login credentials and retrieves user information.
  */
-public class LoginDataSource implements AsyncResponse {
+public class LoginDataSource implements AsyncAPIResponse {
 
     public Result<LoggedInUser> login(String username, String password) {
         LoggedInUser user = null;
