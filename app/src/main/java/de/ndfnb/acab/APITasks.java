@@ -15,7 +15,6 @@ import java.util.Arrays;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import de.ndfnb.acab.data.model.LoggedInUser;
 
 
 public class APITasks extends AsyncTask<String, Void, JSONObject> {

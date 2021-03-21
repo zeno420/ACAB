@@ -1,25 +1,36 @@
-package de.ndfnb.acab.data.model;
+package de.ndfnb.acab;
 
 import android.os.AsyncTask;
 
-import de.ndfnb.acab.MainActivity;
-import de.ndfnb.acab.data.TCPClient;
 
 /**
  * This class handles the creation of the TCPClient and registers for progress (new data) from the server
  * Created by miles on 12/16/15.
  */
 public class ConnectionManagerTask extends AsyncTask<String, String, TCPClient> {
-
-    private MainActivity mainActivity;
+    public AsyncResponse delegate = null;
     public TCPClient mTcpClient;
+    private String host;
+    private int port;
 
-    public ConnectionManagerTask(MainActivity mainActivity) {
-        this.mainActivity = mainActivity;
+
+    public interface AsyncResponse {
+        TCPClient processFinish(TCPClient output);
+    }
+    protected void onPreExecute() { }
+    protected void onPostExecute(TCPClient result) {
+        delegate.processFinish(result);
+    }
+
+    public ConnectionManagerTask(AsyncResponse delegate, String host, int port) {
+        this.host = host;
+        this.port = port;
+        this.delegate = delegate;
     }
 
     /**
      * This function is basically an initializer and creates the TCPClient in a separate thread
+     *
      * @param message Message to send upon connection to the server
      * @return
      */
@@ -27,7 +38,7 @@ public class ConnectionManagerTask extends AsyncTask<String, String, TCPClient> 
     protected TCPClient doInBackground(String... message) {
 
         //Create a TCPClient (the actual socket builder)
-        mTcpClient = new TCPClient(mainActivity, MainActivity.SERVER_IP, MainActivity.SERVER_PORT,
+        mTcpClient = new TCPClient(host, port,
                 new TCPClient.OnMessageReceived() {
                     @Override
                     //here the messageReceived method is implemented
@@ -38,15 +49,11 @@ public class ConnectionManagerTask extends AsyncTask<String, String, TCPClient> 
                 }
         );
         mTcpClient.run();
-
-        return null;
+        return mTcpClient;
     }
 
     @Override
     protected void onProgressUpdate(String... values) {
         super.onProgressUpdate(values);
-
-        // We got a full message from the server!
-        // Add output from the server to our output log
     }
 }

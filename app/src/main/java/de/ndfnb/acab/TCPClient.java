@@ -1,58 +1,60 @@
-package de.ndfnb.acab.data;
+package de.ndfnb.acab;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import org.apache.http.conn.ssl.SSLSocketFactory;
+
+import org.json.JSONObject;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.security.KeyStore;
+
 import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
 
 import de.ndfnb.acab.MainActivity;
 import de.ndfnb.acab.R;
-
-public class TCPClient {
+import de.ndfnb.acab.APITasks.AsyncResponse;
+public class TCPClient  {
 
     public SSLSocket socket = null;
 
-    private MainActivity mainActivity;
     private String serverMessage;
-    private static String SERVER_IP = "";
-    private static int SERVER_PORT = 0;
+    private String host;
+    private int port;
     private OnMessageReceived mMessageListener = null;
     private boolean mRun = false;
     private char[] keystorepass = "thanksmiles".toCharArray(); // If your keystore has a password, put it here
 
-    public static final String TAG = "TCP Client";
-
+    private Context context;
     // These handle the I/O
     private PrintWriter out;
     private BufferedReader in;
 
     /**
-     *  Constructor of the class. OnMessagedReceived listens for the messages received from server
+     * Constructor of the class. OnMessagedReceived listens for the messages received from server
      */
-    public TCPClient(MainActivity mainActivity, String ip, int port, OnMessageReceived listener)
-    {
-        this.mainActivity = mainActivity;
-        SERVER_IP = ip;
-        SERVER_PORT = port;
+    public TCPClient(String host, int port, OnMessageReceived listener) {
+        this.host = host;
+        this.port = port;
         mMessageListener = listener;
     }
 
     /**
      * Sends the message entered by client to the server.
+     *
      * @param message text entered by client
      */
-    public void sendMessage(String message){
+    public void sendMessage(String message) {
         // As of Android 4.0 we have to send to network in another thread...
         TCPMessageSendTask sender = new TCPMessageSendTask(out, message);
         sender.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    public void stopClient(){
+    public void stopClient() {
         mRun = false;
     }
 
@@ -61,28 +63,20 @@ public class TCPClient {
         mRun = true;
 
         try {
-            Log.d(TAG, "Connecting...");
-
             //create a socket to make the connection with the server
-
             KeyStore ks = KeyStore.getInstance("BKS");
             // Load the keystore file
-            InputStream keyin = mainActivity.getResources().openRawResource(R.raw.client_finished);
+            //TODO Key Store muss angelegt werden https://docs.wso2.com/display/EMM200/Generating+a+BKS+File+for+Android
+            InputStream keyin = context.getResources().openRawResource(R.raw.client_finished);
             ks.load(keyin, keystorepass);
 
-            // Create a SSLSocketFactory that allows for self signed certs
-            SSLSocketFactory socketFactory = new SSLSocketFactory(ks);
-            socketFactory.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
-            // Build our socket with the factory and the server info
-            socket = (SSLSocket) socketFactory.createSocket(new Socket(SERVER_IP,SERVER_PORT), SERVER_IP, SERVER_PORT, false);
-            socket.startHandshake();
+            SSLSocketFactory sslsocketfactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
+            socket = (SSLSocket) sslsocketfactory.createSocket(host, port);
 
             try {
 
                 // Create the message sender
                 out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
-
-                Log.d(TAG, "Message Sent.");
 
                 // Create the message receiver
                 in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -98,24 +92,15 @@ public class TCPClient {
                     serverMessage = null;
 
                 }
-
-                Log.d(TAG, "Received Message: '" + serverMessage + "'");
-
             } catch (Exception e) {
-
-                Log.e(TAG, "Server Error", e);
-
+                System.out.println("Server Error: " + e);
             } finally {
                 // Close the socket after stopClient is called
                 socket.close();
             }
-
         } catch (Exception e) {
-
-            Log.e(TAG, "Error", e);
-
+            System.out.println("Server Error: " + e);
         }
-
     }
 
     // Declare the interface. The method messageReceived(String message) will must be implemented
@@ -127,25 +112,38 @@ public class TCPClient {
     /**
      * A simple task for sending messages across the network.
      */
-    public class TCPMessageSendTask extends AsyncTask<Void, Void, Void> {
-
+    public static class TCPMessageSendTask extends AsyncTask<String, Void, JSONObject> {
         private PrintWriter out;
         private String message;
 
-        public TCPMessageSendTask(PrintWriter out, String message){
+        public AsyncResponse delegate = null;
+
+        public interface AsyncResponse {
+            JSONObject processFinish(JSONObject output);
+        }
+
+
+        protected void onPreExecute() {
+        }
+
+        protected void onPostExecute(JSONObject result) {
+            delegate.processFinish(result);
+        }
+
+        public TCPMessageSendTask(AsyncResponse delegate, PrintWriter out, String message) {
+            this.delegate = delegate;
             this.out = out;
             this.message = message;
         }
 
         @Override
-        protected Void doInBackground(Void... arg0){
+        protected JSONObject doInBackground(String... params) {
             if (out != null && !out.checkError()) {
-                try{
+                try {
                     out.println(message);
                     out.flush();
-                }
-                catch (Exception e){
-                    Log.e(TAG, e.getMessage());
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
                 }
             }
             return null;

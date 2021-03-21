@@ -1,5 +1,7 @@
 package de.ndfnb.acab;
 
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -9,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 
-import android.os.Parcelable;
 import android.view.View;
 
 import android.view.Menu;
@@ -17,8 +18,6 @@ import android.view.MenuItem;
 import android.widget.ListView;
 
 import de.ndfnb.acab.data.LoginRepository;
-import de.ndfnb.acab.data.model.ConnectionManagerTask;
-import de.ndfnb.acab.ui.login.LoginViewModel;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -39,8 +38,14 @@ public class MainActivity extends AppCompatActivity {
         loginRepository = getIntent().getParcelableExtra("loginRepository");
         listview = (ListView) findViewById(R.id.listview);
 
-        connectionManager = new ConnectionManagerTask(this);
-        connectionManager.execute("thanks");
+
+
+        //TODO Hier wird der TCPServerService gestartet
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(new Intent(getApplicationContext(), TCPServerService.class));
+        } else {
+            startService(new Intent(getApplicationContext(), TCPServerService.class));
+        }
 
         listview.setAdapter(new ContactAdapter(this, new String[] { "Zeno",
                 "Nico", "Irgend ein Analphabet", "Damit mein ich Zeno", "LOL" }));
