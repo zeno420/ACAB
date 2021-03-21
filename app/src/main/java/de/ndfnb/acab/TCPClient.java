@@ -18,7 +18,7 @@ import javax.net.ssl.SSLSocketFactory;
 import de.ndfnb.acab.MainActivity;
 import de.ndfnb.acab.R;
 import de.ndfnb.acab.APITasks.AsyncResponse;
-public class TCPClient  {
+public class TCPClient implements TCPClient.TCPMessageSendTask.AsyncResponse {
 
     public SSLSocket socket = null;
 
@@ -50,7 +50,7 @@ public class TCPClient  {
      */
     public void sendMessage(String message) {
         // As of Android 4.0 we have to send to network in another thread...
-        TCPMessageSendTask sender = new TCPMessageSendTask(out, message);
+        TCPMessageSendTask sender = new TCPMessageSendTask(TCPClient.this, out, message);
         sender.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
@@ -101,6 +101,11 @@ public class TCPClient  {
         } catch (Exception e) {
             System.out.println("Server Error: " + e);
         }
+    }
+
+    @Override
+    public JSONObject processFinish(JSONObject output) {
+        return null;
     }
 
     // Declare the interface. The method messageReceived(String message) will must be implemented
