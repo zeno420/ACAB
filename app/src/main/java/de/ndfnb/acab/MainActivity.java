@@ -17,10 +17,16 @@ import android.view.MenuItem;
 import android.widget.ListView;
 
 import de.ndfnb.acab.data.LoginRepository;
+import de.ndfnb.acab.data.model.ConnectionManagerTask;
 import de.ndfnb.acab.ui.login.LoginViewModel;
 
 
 public class MainActivity extends AppCompatActivity {
+
+    private ConnectionManagerTask connectionManager;
+    public static final String SERVER_IP = "" ;
+    public static final int SERVER_PORT = 1;
+
 
     ListView listview;
     LoginRepository loginRepository;
@@ -32,6 +38,10 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         loginRepository = getIntent().getParcelableExtra("loginRepository");
         listview = (ListView) findViewById(R.id.listview);
+
+        connectionManager = new ConnectionManagerTask(this);
+        connectionManager.execute("thanks");
+
         listview.setAdapter(new ContactAdapter(this, new String[] { "Zeno",
                 "Nico", "Irgend ein Analphabet", "Damit mein ich Zeno", "LOL" }));
         getSupportActionBar().setTitle("All Chats are Beautiful");
