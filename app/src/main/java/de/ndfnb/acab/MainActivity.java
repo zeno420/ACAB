@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
                         .getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
                     InetAddress inetAddress = enumIpAddr.nextElement();
 
-                    if (!inetAddress.isLoopbackAddress() && inetAddress instanceof Inet6Address) {
+                    if (!inetAddress.isLoopbackAddress() && !inetAddress.isLinkLocalAddress() && !inetAddress.isSiteLocalAddress() && inetAddress instanceof Inet6Address) {
                         String ipaddress = inetAddress.getHostAddress().toString();
                         return ipaddress;
                     }
