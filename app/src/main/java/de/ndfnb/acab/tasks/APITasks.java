@@ -91,11 +91,11 @@ public class APITasks extends AsyncTask<String, Void, JSONObject> {
         final String requestBodyString = requestBody.toString();
 
 
+        try (OutputStream os = con.getOutputStream()) {
+            os.write(requestBody.toString().getBytes("UTF-8"));
+        }
         int responseCode = con.getResponseCode();
         if (responseCode == HttpsURLConnection.HTTP_OK) { // success
-            try (OutputStream os = con.getOutputStream()) {
-                os.write(requestBody.toString().getBytes("UTF-8"));
-            }
             try (BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"))) {
                 StringBuilder response = new StringBuilder();
                 String responseLine = null;
@@ -186,11 +186,12 @@ public class APITasks extends AsyncTask<String, Void, JSONObject> {
         requestBody.put("passwd", password);
         final String requestBodyString = requestBody.toString();
 
+
+        try (OutputStream os = con.getOutputStream()) {
+            os.write(requestBody.toString().getBytes("UTF-8"));
+        }
         int responseCode = con.getResponseCode();
         if (responseCode == HttpsURLConnection.HTTP_OK) { // success
-            try (OutputStream os = con.getOutputStream()) {
-                os.write(requestBody.toString().getBytes("UTF-8"));
-            }
             try (BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"))) {
                 StringBuilder response = new StringBuilder();
                 String responseLine = null;

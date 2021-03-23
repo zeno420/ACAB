@@ -21,6 +21,10 @@
             android:name=".service.TCPServerService"
             android:enabled="true"
             android:exported="false" />
+        <service
+            android:name=".service.RouteRefreshService"
+            android:enabled="true"
+            android:exported="false" />
         <activity
             android:name=".ui.chat.ChatActivity"
             android:label="@string/title_activity_chat"></activity>

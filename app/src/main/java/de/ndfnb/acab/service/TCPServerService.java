@@ -23,11 +23,11 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.atomic.AtomicBoolean;
 import de.ndfnb.acab.R;
+import de.ndfnb.acab.data.LoginRepository;
 
 public class TCPServerService extends Service {
 
-
-
+    private LoginRepository loginRepository;
     private ServerSocket serverSocket = null;
     private PrintWriter out;
     private boolean mRun;
@@ -54,8 +54,12 @@ public class TCPServerService extends Service {
                             // Listen for the messages sent by the server, stopClient breaks this loop
                             while (mRun) {
                                 clientMessage = in.readLine();
-                                System.out.println(clientMessage);
-                                clientMessage = null;
+                                if (clientMessage != null) {
+                                    System.out.println(clientMessage);
+                                    clientMessage = null;
+                                }
+
+
 
 
 
@@ -113,10 +117,15 @@ public class TCPServerService extends Service {
     ;
 
     @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        this.loginRepository = intent.getParcelableExtra("loginRepository");
+        return super.onStartCommand(intent, flags, startId);
+    }
+
+    @Override
     public void onCreate() {
         super.onCreate();
         startMeForeground();
-        System.out.println("Nudelholz funktioniert");
         new Thread(runnable).start();
     }
 

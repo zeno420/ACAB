@@ -13,18 +13,27 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.concurrent.ExecutionException;
 
+import de.ndfnb.acab.connection.TCPClient;
 import de.ndfnb.acab.tasks.APITasks;
 import de.ndfnb.acab.tasks.APITasks.AsyncAPIResponse;
 import de.ndfnb.acab.data.LoginRepository;
+import de.ndfnb.acab.tasks.ConnectionManagerTask;
+import de.ndfnb.acab.tasks.ConnectionManagerTask.AsyncTCPClientResponse;
+import de.ndfnb.acab.tasks.ConnectionManagerTask.*;
+import de.ndfnb.acab.ui.chat.ChatActivity;
 
-public class AddContactDialogFragment extends DialogFragment implements AsyncAPIResponse {
+public class AddContactDialogFragment extends DialogFragment implements AsyncAPIResponse, AsyncTCPClientResponse {
     private EditText mEditText;
     private LoginRepository loginRepository;
-
+    private ConnectionManagerTask connectionManagerTask;
+    private JSONObject routeJSONObject;
+    private TCPClient tcpClient;
     public static AddContactDialogFragment newInstance(String title, LoginRepository loginRepository) {
         AddContactDialogFragment frag = new AddContactDialogFragment();
         Bundle args = new Bundle();
@@ -48,6 +57,18 @@ public class AddContactDialogFragment extends DialogFragment implements AsyncAPI
 
     }
 
+    private JSONObject getRoute(String name) throws ExecutionException, InterruptedException, JSONException {
+        this.routeJSONObject = new APITasks(AddContactDialogFragment.this).execute("get_route", loginRepository.getLoggedInUser().getJwtToken(), name).get();
+        JSONArray routeArray = this.routeJSONObject.getJSONArray("data");
+        try {
+            JSONObject routeJSONObject = routeArray.getJSONObject(0);
+        } catch (JSONException e) {
+            return null;
+        }
+        return routeJSONObject;
+    }
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -59,6 +80,7 @@ public class AddContactDialogFragment extends DialogFragment implements AsyncAPI
         TextView nameTextView = (TextView) view.findViewById(R.id.username_input);
         Button addBtn = (Button) view.findViewById(R.id.add_contact_add_button);
         Button cancelBtn = (Button) view.findViewById(R.id.add_contact_cancel_button);
+        TextView message_input = (TextView) view.findViewById(R.id.message_input);
 
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,11 +96,10 @@ public class AddContactDialogFragment extends DialogFragment implements AsyncAPI
                 String name = nameTextView.getText().toString();
                 String jwtToken = loginRepository.getLoggedInUser().getJwtToken();
                 try {
-                    JSONObject result = new APITasks(AddContactDialogFragment.this).execute("get_route", jwtToken, name).get();
-                    System.out.println(result);
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
+                    routeJSONObject = getRoute(name);
+                    tcpClient = new ConnectionManagerTask(AddContactDialogFragment.this, routeJSONObject.getString("route"), 6969, getContext()).execute("Now we are connected").get();
+                    tcpClient.sendMessage(message_input.getText().toString());
+                } catch (ExecutionException | JSONException | InterruptedException e) {
                     e.printStackTrace();
                 }
                 //String code = result.getString("code");
@@ -86,6 +107,7 @@ public class AddContactDialogFragment extends DialogFragment implements AsyncAPI
         });
         return view;
     }
+
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -105,6 +127,11 @@ public class AddContactDialogFragment extends DialogFragment implements AsyncAPI
 
     @Override
     public JSONObject processFinish(JSONObject output) {
+        return output;
+    }
+
+    @Override
+    public TCPClient processFinish(TCPClient output) {
         return output;
     }
 }

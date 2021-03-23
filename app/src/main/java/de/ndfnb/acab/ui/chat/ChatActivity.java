@@ -19,7 +19,7 @@ import de.ndfnb.acab.tasks.ConnectionManagerTask.AsyncTCPClientResponse;
 import de.ndfnb.acab.R;
 import de.ndfnb.acab.connection.TCPClient;
 import de.ndfnb.acab.tasks.APITasks.AsyncAPIResponse;
-public class ChatActivity extends AppCompatActivity implements AsyncAPIResponse, AsyncTCPClientResponse {
+public class ChatActivity extends AppCompatActivity  {
     private TextView mTextView;
     private TCPClient tcpClient;
     private LoginRepository loginRepository;
@@ -32,43 +32,14 @@ public class ChatActivity extends AppCompatActivity implements AsyncAPIResponse,
         setContentView(R.layout.activity_chat);
         this.name = getIntent().getStringExtra("name");
         loginRepository = getIntent().getParcelableExtra("loginRepository");
-        try {
-            this.routeJSONObject = this.getRoute();
-        } catch (ExecutionException | InterruptedException | JSONException e) {
-            e.printStackTrace();
-        }
-        try {
-            if (this.routeJSONObject != null) {
-                tcpClient = new ConnectionManagerTask(ChatActivity.this, this.routeJSONObject.getString("route"), 420187, getApplicationContext()).execute("thanks").get();
-                tcpClient.sendMessage("");
-            } else {
-                //TODO was tun wenn user nicht gefunden wurde. Eigentlich nicht möglich, dass leere Route möglich ist
-            }
-        } catch (ExecutionException | InterruptedException | JSONException e) {
-            e.printStackTrace();
-        }
+
+
+
         mTextView = (TextView) findViewById(R.id.text);
 
     }
 
-    private JSONObject getRoute() throws ExecutionException, InterruptedException, JSONException {
-        this.routeJSONObject = new APITasks(ChatActivity.this).execute("get_route", loginRepository.getLoggedInUser().getJwtToken(), name).get();
-        JSONArray routeArray = this.routeJSONObject.getJSONArray("data");
-        try {
-            JSONObject routeJSONObject = routeArray.getJSONObject(0);
-        } catch (JSONException e) {
-            return null;
-        }
-        return routeJSONObject;
-    }
 
-    @Override
-    public JSONObject processFinish(JSONObject output) {
-        return output;
-    }
 
-    @Override
-    public TCPClient processFinish(TCPClient output) {
-        return null;
-    }
+
 }

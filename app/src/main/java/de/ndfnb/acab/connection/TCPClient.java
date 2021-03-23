@@ -58,7 +58,7 @@ public class TCPClient implements AsyncTCPMessageResponse {
      */
     public void sendMessage(String message) throws ExecutionException, InterruptedException {
         // As of Android 4.0 we have to send to network in another thread...
-        JSONObject result = new TCPMessageSendTask(TCPClient.this, out, message).execute(message).get();
+        new TCPMessageSendTask(TCPClient.this, out, message).execute(message).get();
     }
 
     public void stopClient() {

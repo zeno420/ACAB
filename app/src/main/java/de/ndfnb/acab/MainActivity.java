@@ -36,9 +36,6 @@ import java.util.Enumeration;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ConnectionManagerTask connectionManager;
-    public static final String SERVER_IP = "";
-    public static final int SERVER_PORT = 1;
 
 
     ListView listview;
@@ -54,15 +51,22 @@ public class MainActivity extends AppCompatActivity {
         listview = (ListView) findViewById(R.id.listview);
 
 
-        //TODO Hier wird der TCPServerService gestartet
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(new Intent(getApplicationContext(), TCPServerService.class));
+            Intent tcpIntent = new Intent(getApplicationContext(), TCPServerService.class);
+            Intent routeIntent = new Intent(getApplicationContext(), RouteRefreshService.class);
+            tcpIntent.putExtra("loginRepository", loginRepository);
+            routeIntent.putExtra("loginRepository", loginRepository);
+            startForegroundService(tcpIntent);
+            startForegroundService(routeIntent);
         } else {
-            startService(new Intent(getApplicationContext(), TCPServerService.class));
+            Intent tcpIntent = new Intent(getApplicationContext(), TCPServerService.class);
+            Intent routeIntent = new Intent(getApplicationContext(), RouteRefreshService.class);
+            tcpIntent.putExtra("loginRepository", loginRepository);
+            routeIntent.putExtra("loginRepository", loginRepository);
+            startService(tcpIntent);
+            startService(routeIntent);
         }
 
-        String ip = this.getLocalIpV6();
-        System.out.println(ip);
         listview.setAdapter(new ContactAdapter(this, new String[]{"zeno420",
                 "Nico", "Irgend ein Analphabet", "Damit mein ich Zeno", "LOL"}));
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -113,26 +117,5 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public String getLocalIpV6() {
-        try {
-            for (Enumeration<NetworkInterface> en = NetworkInterface
-                    .getNetworkInterfaces(); en.hasMoreElements(); ) {
-                NetworkInterface intf = en.nextElement();
-                for (Enumeration<InetAddress> enumIpAddr = intf
-                        .getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
-                    InetAddress inetAddress = enumIpAddr.nextElement();
 
-                    if (!inetAddress.isLoopbackAddress() && !inetAddress.isLinkLocalAddress() && !inetAddress.isSiteLocalAddress() && inetAddress instanceof Inet6Address) {
-                        String ipaddress = inetAddress.getHostAddress().toString();
-                        return ipaddress;
-                    }
-
-
-                }
-            }
-        } catch (Exception ex) {
-            Log.e("IP Address", ex.toString());
-        }
-        return null;
-    }
 }

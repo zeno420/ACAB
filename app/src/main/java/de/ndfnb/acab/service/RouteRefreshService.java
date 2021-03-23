@@ -8,6 +8,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.IBinder;
+import android.os.Parcelable;
+import android.os.SystemClock;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -19,12 +22,17 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.net.Inet6Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Enumeration;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import de.ndfnb.acab.R;
+import de.ndfnb.acab.data.LoginRepository;
 import de.ndfnb.acab.tasks.APITasks;
 import de.ndfnb.acab.tasks.APITasks.AsyncAPIResponse;
 
@@ -32,11 +40,34 @@ import de.ndfnb.acab.tasks.APITasks.AsyncAPIResponse;
 // in the implementing class
 //TODO das ist ein BackgroundService um die routen immer aktuell zu halten
 public class RouteRefreshService extends Service implements AsyncAPIResponse {
+    private LoginRepository loginRepository;
+
     @Override
     public JSONObject processFinish(JSONObject output) {
         return output;
     }
+    private String getLocalIpV6() {
+        try {
+            for (Enumeration<NetworkInterface> en = NetworkInterface
+                    .getNetworkInterfaces(); en.hasMoreElements(); ) {
+                NetworkInterface intf = en.nextElement();
+                for (Enumeration<InetAddress> enumIpAddr = intf
+                        .getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
+                    InetAddress inetAddress = enumIpAddr.nextElement();
 
+                    if (!inetAddress.isLoopbackAddress() && !inetAddress.isLinkLocalAddress() && !inetAddress.isSiteLocalAddress() && inetAddress instanceof Inet6Address) {
+                        String ipaddress = inetAddress.getHostAddress().toString();
+                        return ipaddress;
+                    }
+
+
+                }
+            }
+        } catch (Exception ex) {
+            Log.e("IP Address", ex.toString());
+        }
+        return null;
+    }
 
     private boolean mRun;
     private AtomicBoolean working = new AtomicBoolean(true);
@@ -49,7 +80,9 @@ public class RouteRefreshService extends Service implements AsyncAPIResponse {
                 try {
                     //TODO get route and compare to current
                     //if difference update new one
-                    JSONObject result = new APITasks(RouteRefreshService.this).execute("update_route").get();
+                    JSONObject result = new APITasks(RouteRefreshService.this).execute("update_route", loginRepository.getLoggedInUser().getJwtToken(), getLocalIpV6()).get();
+                    System.out.println(result.toString());
+                    SystemClock.sleep(300000);
 
 
                 } catch (InterruptedException | ExecutionException e) {
@@ -59,6 +92,13 @@ public class RouteRefreshService extends Service implements AsyncAPIResponse {
         }
 
     };
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        this.loginRepository = intent.getParcelableExtra("loginRepository");
+        return super.onStartCommand(intent, flags, startId);
+    }
+
 
 
     private void startMeForeground() {
