@@ -21,39 +21,64 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicBoolean;
-
 import de.ndfnb.acab.R;
-import de.ndfnb.acab.tasks.APITasks;
-import de.ndfnb.acab.tasks.APITasks.AsyncAPIResponse;
 
-// Declare the interface. The method messageReceived(String message) will must be implemented
-// in the implementing class
-//TODO das ist ein BackgroundService um die routen immer aktuell zu halten
-public class RouteRefreshService extends Service implements AsyncAPIResponse {
-    @Override
-    public JSONObject processFinish(JSONObject output) {
-        return output;
-    }
+public class TCPServerService extends Service {
 
 
+
+    private ServerSocket serverSocket = null;
+    private PrintWriter out;
     private boolean mRun;
+    private BufferedReader in;
+    private String clientMessage;
     private AtomicBoolean working = new AtomicBoolean(true);
     private Runnable runnable = new Runnable() {
         @Override
         public void run() {
             Socket socket = null;
             mRun = true;
-            while (mRun) {
+            try {
+                serverSocket = new ServerSocket(6969);
+                while (working.get()) {
+                    if (serverSocket != null) {
+                        socket = serverSocket.accept();
+                        try {
+                            // Create the message sender
+                            out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
+
+                            // Create the message receiver
+                            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+                            // Listen for the messages sent by the server, stopClient breaks this loop
+                            while (mRun) {
+                                clientMessage = in.readLine();
+                                System.out.println(clientMessage);
+                                clientMessage = null;
+
+
+
+                            }
+
+
+                        } catch (Exception e) {
+
+                            System.out.println("Server Error: " + e);
+
+                        } finally {
+                            // Close the socket after stopClient is called
+                            socket.close();
+                        }
+                    } else {
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
                 try {
-                    //TODO get route and compare to current
-                    //if difference update new one
-                    JSONObject result = new APITasks(RouteRefreshService.this).execute("update_route").get();
-
-
-                } catch (InterruptedException | ExecutionException e) {
-                    e.printStackTrace();
+                    socket.close();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
                 }
             }
         }
@@ -63,7 +88,7 @@ public class RouteRefreshService extends Service implements AsyncAPIResponse {
 
     private void startMeForeground() {
         String NOTIFICATION_CHANNEL_ID = getPackageName();
-        String channelName = "Route Refresh Background Service";
+        String channelName = "Tcp Server Background Service";
         NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_NONE);
         chan.setLightColor(Color.BLUE);
         chan.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
@@ -72,7 +97,7 @@ public class RouteRefreshService extends Service implements AsyncAPIResponse {
         Notification.Builder notificationBuilder = new Notification.Builder(this, NOTIFICATION_CHANNEL_ID);
         Notification notification = notificationBuilder.setOngoing(true)
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
-                .setContentTitle("Route Refresh  is running in background")
+                .setContentTitle("Tcp Server is running in background")
                 .setCategory(Notification.CATEGORY_SERVICE)
                 .build();
         startForeground(2, notification);
@@ -91,6 +116,7 @@ public class RouteRefreshService extends Service implements AsyncAPIResponse {
     public void onCreate() {
         super.onCreate();
         startMeForeground();
+        System.out.println("Nudelholz funktioniert");
         new Thread(runnable).start();
     }
 
@@ -98,6 +124,8 @@ public class RouteRefreshService extends Service implements AsyncAPIResponse {
     public void onDestroy() {
         working.set(false);
     }
-
+    /**
+     * A simple task for sending messages across the network.
+     */
 
 }

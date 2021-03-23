@@ -1,6 +1,7 @@
 package de.ndfnb.acab;
 
 import android.content.Intent;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -11,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 
+import android.text.format.Formatter;
+import android.util.Log;
 import android.view.View;
 
 import android.view.Menu;
@@ -18,11 +21,18 @@ import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import de.ndfnb.acab.connection.TCPClient;
 import de.ndfnb.acab.data.LoginRepository;
 import de.ndfnb.acab.service.RouteRefreshService;
+import de.ndfnb.acab.service.TCPServerService;
 import de.ndfnb.acab.tasks.ConnectionManagerTask;
 import de.ndfnb.acab.ui.chat.ChatActivity;
 
+import java.net.Inet6Address;
+import java.net.InetAddress;
+import java.net.InetAddress.*;
+import java.net.NetworkInterface;
+import java.util.Enumeration;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -46,11 +56,13 @@ public class MainActivity extends AppCompatActivity {
 
         //TODO Hier wird der TCPServerService gestartet
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(new Intent(getApplicationContext(), RouteRefreshService.class));
+            startForegroundService(new Intent(getApplicationContext(), TCPServerService.class));
         } else {
-            startService(new Intent(getApplicationContext(), RouteRefreshService.class));
+            startService(new Intent(getApplicationContext(), TCPServerService.class));
         }
 
+        String ip = this.getLocalIpV6();
+        System.out.println(ip);
         listview.setAdapter(new ContactAdapter(this, new String[]{"zeno420",
                 "Nico", "Irgend ein Analphabet", "Damit mein ich Zeno", "LOL"}));
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -99,5 +111,28 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public String getLocalIpV6() {
+        try {
+            for (Enumeration<NetworkInterface> en = NetworkInterface
+                    .getNetworkInterfaces(); en.hasMoreElements(); ) {
+                NetworkInterface intf = en.nextElement();
+                for (Enumeration<InetAddress> enumIpAddr = intf
+                        .getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
+                    InetAddress inetAddress = enumIpAddr.nextElement();
+
+                    if (!inetAddress.isLoopbackAddress() && inetAddress instanceof Inet6Address) {
+                        String ipaddress = inetAddress.getHostAddress().toString();
+                        return ipaddress;
+                    }
+
+
+                }
+            }
+        } catch (Exception ex) {
+            Log.e("IP Address", ex.toString());
+        }
+        return null;
     }
 }

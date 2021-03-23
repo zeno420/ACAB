@@ -40,6 +40,7 @@ public class ChatActivity extends AppCompatActivity implements AsyncAPIResponse,
         try {
             if (this.routeJSONObject != null) {
                 tcpClient = new ConnectionManagerTask(ChatActivity.this, this.routeJSONObject.getString("route"), 420187, getApplicationContext()).execute("thanks").get();
+                tcpClient.sendMessage("");
             } else {
                 //TODO was tun wenn user nicht gefunden wurde. Eigentlich nicht möglich, dass leere Route möglich ist
             }
