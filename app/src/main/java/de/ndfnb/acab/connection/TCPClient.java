@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.net.Socket;
 import java.security.KeyStore;
 import java.util.concurrent.ExecutionException;
 
@@ -27,8 +28,8 @@ import de.ndfnb.acab.tasks.TCPMessageSendTask.AsyncTCPMessageResponse;
  */
 public class TCPClient implements AsyncTCPMessageResponse {
 
-    public SSLSocket socket = null;
-
+    //public SSLSocket socket = null;
+    public Socket socket = null;
     private String serverMessage;
     private String host;
     private int port;
@@ -76,10 +77,10 @@ public class TCPClient implements AsyncTCPMessageResponse {
             //TODO Key Store muss angelegt werden https://docs.wso2.com/display/EMM200/Generating+a+BKS+File+for+Android
             //InputStream keyin = context.getResources().openRawResource(R.raw.client_finished);
             //ks.load(keyin, keystorepass);
-
-            SSLSocketFactory sslsocketfactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
-            socket = (SSLSocket) sslsocketfactory.createSocket(host, port);
-
+            //TODO SSL Socket to fix
+            //SSLSocketFactory sslsocketfactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
+            //socket = (SSLSocket) sslsocketfactory.createSocket(host, port);
+            socket = new Socket(host, port);  //verbindet sich mit Server
             try {
 
                 // Create the message sender

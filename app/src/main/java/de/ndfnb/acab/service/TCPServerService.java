@@ -21,6 +21,8 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 import de.ndfnb.acab.R;
 import de.ndfnb.acab.data.LoginRepository;
@@ -33,15 +35,21 @@ public class TCPServerService extends Service {
     private boolean mRun;
     private BufferedReader in;
     private String clientMessage;
+    //fixme poolsize
+    private ExecutorService pool = Executors.newFixedThreadPool(10);
     private AtomicBoolean working = new AtomicBoolean(true);
     private Runnable runnable = new Runnable() {
+
         @Override
         public void run() {
             Socket socket = null;
             mRun = true;
             try {
                 serverSocket = new ServerSocket(6969);
-                while (working.get()) {
+
+                Thread t1 = new Thread(new NetworkService(pool, serverSocket));
+                t1.start();
+                /*while (working.get()) {
                     if (serverSocket != null) {
                         socket = serverSocket.accept();
                         try {
@@ -76,7 +84,7 @@ public class TCPServerService extends Service {
                         }
                     } else {
                     }
-                }
+                }*/
             } catch (IOException e) {
                 e.printStackTrace();
                 try {
