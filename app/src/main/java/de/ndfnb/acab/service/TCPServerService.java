@@ -25,6 +25,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 import de.ndfnb.acab.R;
+import de.ndfnb.acab.connection.NetworkService;
 import de.ndfnb.acab.data.LoginRepository;
 
 public class TCPServerService extends Service {
