@@ -69,18 +69,9 @@ public class TCPServerService extends Service {
                                     System.out.println(clientMessage);
                                     clientMessage = null;
                                 }
-
-
-
-
-
                             }
-
-
                         } catch (Exception e) {
-
                             System.out.println("Server Error: " + e);
-
                         } finally {
                             // Close the socket after stopClient is called
                             socket.close();

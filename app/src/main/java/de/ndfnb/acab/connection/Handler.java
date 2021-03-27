@@ -26,10 +26,8 @@ class Handler implements Runnable {  //oder 'extends Thread'
     public void run() {
         StringBuffer sb = new StringBuffer();
         try {
-            // Create the message sender
             out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(client.getOutputStream())), true);
 
-            // Create the message receiver
             in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 
             // Listen for the messages sent by the server, stopClient breaks this loop
@@ -43,7 +41,6 @@ class Handler implements Runnable {  //oder 'extends Thread'
         } catch (IOException e) {
             System.out.println("IOException, Handler-run");
         } finally {
-            out.println(sb);  //Rückgabe Ergebnis an den Client
             if (!client.isClosed()) {
                 System.out.println("****** Handler:Client close");
                 try {

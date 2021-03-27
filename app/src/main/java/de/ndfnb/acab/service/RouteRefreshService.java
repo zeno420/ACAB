@@ -83,7 +83,7 @@ public class RouteRefreshService extends Service implements AsyncAPIResponse {
                         JSONObject result = new APITasks(RouteRefreshService.this).execute("update_route", loginRepository.getLoggedInUser().getJwtToken(), getLocalIpV6()).get();
                         System.out.println(result.toString());
                     }
-                    SystemClock.sleep(300000);
+                    SystemClock.sleep(30000);
 
 
                 } catch (InterruptedException | ExecutionException e) {

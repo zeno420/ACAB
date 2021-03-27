@@ -39,7 +39,7 @@ public class TCPMessageSendTask extends AsyncTask<String, Void, JSONObject> {
     protected JSONObject doInBackground(String... params) {
         if (out != null && !out.checkError()) {
             try {
-                out.println(message);
+                out.print(message);
                 out.flush();
             } catch (Exception e) {
                 System.out.println(e.getMessage());

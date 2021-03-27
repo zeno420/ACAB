@@ -71,7 +71,7 @@ public class ConnectionManagerTask extends AsyncTask<String, String, TCPClient> 
     protected TCPClient doInBackground(String... params) {
 
         //Create a TCPClient (the actual socket builder)
-        mTcpClient = new TCPClient(params[0], params[1]);
+        mTcpClient = new TCPClient(params[0], params[1], params[2]);
         mTcpClient.run();
         return mTcpClient;
     }
