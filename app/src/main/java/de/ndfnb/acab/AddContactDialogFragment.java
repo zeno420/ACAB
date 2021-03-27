@@ -32,8 +32,9 @@ public class AddContactDialogFragment extends DialogFragment implements AsyncAPI
     private EditText mEditText;
     private LoginRepository loginRepository;
     private ConnectionManagerTask connectionManagerTask;
-    private JSONObject routeJSONObject;
+    //private JSONObject routeJSONObject;
     private TCPClient tcpClient;
+
     public static AddContactDialogFragment newInstance(String title, LoginRepository loginRepository) {
         AddContactDialogFragment frag = new AddContactDialogFragment();
         Bundle args = new Bundle();
@@ -57,7 +58,7 @@ public class AddContactDialogFragment extends DialogFragment implements AsyncAPI
 
     }
 
-    private JSONObject getRoute(String name) throws ExecutionException, InterruptedException, JSONException {
+    /*private JSONObject getRoute(String name) throws ExecutionException, InterruptedException, JSONException {
         this.routeJSONObject = new APITasks(AddContactDialogFragment.this).execute("get_route", loginRepository.getLoggedInUser().getJwtToken(), name).get();
         JSONArray routeArray = this.routeJSONObject.getJSONArray("data");
         try {
@@ -66,6 +67,11 @@ public class AddContactDialogFragment extends DialogFragment implements AsyncAPI
             return null;
         }
         return routeJSONObject;
+    }*/
+
+    private String getRoute(String name) throws ExecutionException, InterruptedException, JSONException {
+        JSONObject routeJSONObject = new APITasks(AddContactDialogFragment.this).execute("get_route", loginRepository.getLoggedInUser().getJwtToken(), name).get();
+        return routeJSONObject.getJSONArray("data").getJSONObject(0).getString("route");
     }
 
 
@@ -96,8 +102,12 @@ public class AddContactDialogFragment extends DialogFragment implements AsyncAPI
                 String name = nameTextView.getText().toString();
                 String jwtToken = loginRepository.getLoggedInUser().getJwtToken();
                 try {
-                    routeJSONObject = getRoute(name);
-                    tcpClient = new ConnectionManagerTask(AddContactDialogFragment.this, routeJSONObject.getString("route"), 6969, getContext()).execute("Now we are connected").get();
+                    //routeJSONObject = getRoute(name);
+                    //tcpClient = new ConnectionManagerTask(AddContactDialogFragment.this, routeJSONObject.getString("route"), 6969, getContext()).execute("Now we are connected").get();
+                    String route = getRoute(name);
+                    //tcpClient = new ConnectionManagerTask(AddContactDialogFragment.this, route, 6969, getContext()).execute("Now we are connected").get();
+                    tcpClient = new ConnectionManagerTask(AddContactDialogFragment.this, getContext()).execute(route, "6969").get();
+
                     tcpClient.sendMessage(message_input.getText().toString());
                 } catch (ExecutionException | JSONException | InterruptedException e) {
                     e.printStackTrace();

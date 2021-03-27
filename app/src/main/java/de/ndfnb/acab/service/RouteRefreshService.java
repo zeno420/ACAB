@@ -46,6 +46,7 @@ public class RouteRefreshService extends Service implements AsyncAPIResponse {
     public JSONObject processFinish(JSONObject output) {
         return output;
     }
+
     private String getLocalIpV6() {
         try {
             for (Enumeration<NetworkInterface> en = NetworkInterface
@@ -78,10 +79,10 @@ public class RouteRefreshService extends Service implements AsyncAPIResponse {
             mRun = true;
             while (mRun) {
                 try {
-                    //TODO get route and compare to current
-                    //if difference update new one
-                    JSONObject result = new APITasks(RouteRefreshService.this).execute("update_route", loginRepository.getLoggedInUser().getJwtToken(), getLocalIpV6()).get();
-                    System.out.println(result.toString());
+                    if (loginRepository != null) {
+                        JSONObject result = new APITasks(RouteRefreshService.this).execute("update_route", loginRepository.getLoggedInUser().getJwtToken(), getLocalIpV6()).get();
+                        System.out.println(result.toString());
+                    }
                     SystemClock.sleep(300000);
 
 
@@ -98,7 +99,6 @@ public class RouteRefreshService extends Service implements AsyncAPIResponse {
         this.loginRepository = intent.getParcelableExtra("loginRepository");
         return super.onStartCommand(intent, flags, startId);
     }
-
 
 
     private void startMeForeground() {

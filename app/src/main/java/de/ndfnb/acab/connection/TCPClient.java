@@ -52,11 +52,15 @@ public class TCPClient implements AsyncTCPMessageResponse {
         mMessageListener = listener;
     }
 
-    /**
-     * Sends the message entered by client to the server.
-     *
-     * @param message text entered by client
-     */
+    public TCPClient(String host, String port) {
+        this.host = host;
+        this.port = Integer.valueOf(port);
+    }
+        /**
+         * Sends the message entered by client to the server.
+         *
+         * @param message text entered by client
+         */
     public void sendMessage(String message) throws ExecutionException, InterruptedException {
         // As of Android 4.0 we have to send to network in another thread...
         new TCPMessageSendTask(TCPClient.this, out, message).execute(message).get();
@@ -80,7 +84,7 @@ public class TCPClient implements AsyncTCPMessageResponse {
             //TODO SSL Socket to fix
             //SSLSocketFactory sslsocketfactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
             //socket = (SSLSocket) sslsocketfactory.createSocket(host, port);
-            socket = new Socket(host, port);  //verbindet sich mit Server
+            socket = new Socket(host, port);
             try {
 
                 // Create the message sender
