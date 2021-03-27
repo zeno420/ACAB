@@ -106,6 +106,7 @@ public class AddContactDialogFragment extends DialogFragment implements AsyncAPI
                     //tcpClient = new ConnectionManagerTask(AddContactDialogFragment.this, routeJSONObject.getString("route"), 6969, getContext()).execute("Now we are connected").get();
                     String route = getRoute(name);
                     //tcpClient = new ConnectionManagerTask(AddContactDialogFragment.this, route, 6969, getContext()).execute("Now we are connected").get();
+                    //TODO thread nicht an ui element binden, app geblockt bei fail/labńger dauer
                     tcpClient = new ConnectionManagerTask(AddContactDialogFragment.this, getContext()).execute(route, "6969", message_input.getText().toString()).get();
 
                     //tcpClient.sendMessage(message_input.getText().toString());
