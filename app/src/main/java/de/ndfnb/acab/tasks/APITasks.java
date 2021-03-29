@@ -85,7 +85,6 @@ public class APITasks extends AsyncTask<String, Void, JSONObject> {
             } catch (Exception ex) {
                 e.printStackTrace();
             }
-            e.printStackTrace();
         }
 
         return resultJSON;
