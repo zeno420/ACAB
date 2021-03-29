@@ -49,7 +49,6 @@ public class APITasks extends AsyncTask<String, Void, JSONObject> {
             }
         } else if (route == "get_route") {
             try {
-
                 result = this.getRouteByName(args[0], args[1]);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -66,6 +65,12 @@ public class APITasks extends AsyncTask<String, Void, JSONObject> {
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
             }
+        } else if (route == "get_ip") {
+            try {
+                result = this.getIPAddr();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         } else {
             result = "no matching route";
         }
@@ -73,6 +78,13 @@ public class APITasks extends AsyncTask<String, Void, JSONObject> {
         try {
             resultJSON = new JSONObject(result);
         } catch (JSONException e) {
+            try {
+                result  = "{ 'ip': " + result + "}";
+                resultJSON = new JSONObject(result);
+
+            } catch (Exception ex) {
+                e.printStackTrace();
+            }
             e.printStackTrace();
         }
 
@@ -108,6 +120,7 @@ public class APITasks extends AsyncTask<String, Void, JSONObject> {
                 return result;
             }
         } else {
+            //TODO mitteilen wenn das nicht erfolgreich war
             return null;
         }
     }
@@ -136,8 +149,6 @@ public class APITasks extends AsyncTask<String, Void, JSONObject> {
         } else {
             return null;
         }
-
-
     }
 
 
@@ -209,6 +220,30 @@ public class APITasks extends AsyncTask<String, Void, JSONObject> {
         }
     }
 
+
+    private String getIPAddr() throws IOException {
+        URL url = new URL("https://api.ipify.org/");
+        HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
+        con.setRequestMethod("GET");
+        String result = "";
+
+        int responseCode = con.getResponseCode();
+        if (responseCode == HttpsURLConnection.HTTP_OK) { // success
+            BufferedReader in = new BufferedReader(new InputStreamReader(
+                    con.getInputStream()));
+            String inputLine;
+            StringBuffer response = new StringBuffer();
+
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+            result = response.toString();
+            return result;
+        } else {
+            return null;
+        }
+    }
 
 }
 

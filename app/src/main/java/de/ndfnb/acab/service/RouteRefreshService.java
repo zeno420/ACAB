@@ -14,6 +14,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -69,8 +70,18 @@ public class RouteRefreshService extends Service implements AsyncAPIResponse {
         }
         return null;
     }
+    private String getLocalIpV4() throws ExecutionException, InterruptedException {
+        JSONObject result = new APITasks(RouteRefreshService.this).execute("get_ip").get();
+        System.out.println(result);
+        try {
+            return result.getString("ip");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
-    private boolean mRun;
+        private boolean mRun;
     private AtomicBoolean working = new AtomicBoolean(true);
     private Runnable runnable = new Runnable() {
         @Override
@@ -80,7 +91,7 @@ public class RouteRefreshService extends Service implements AsyncAPIResponse {
             while (mRun) {
                 try {
                     if (loginRepository != null) {
-                        JSONObject result = new APITasks(RouteRefreshService.this).execute("update_route", loginRepository.getLoggedInUser().getJwtToken(), getLocalIpV6()).get();
+                        JSONObject result = new APITasks(RouteRefreshService.this).execute("update_route", loginRepository.getLoggedInUser().getJwtToken(), getLocalIpV4()).get();
                         System.out.println(result.toString());
                     }
                     SystemClock.sleep(30000);
