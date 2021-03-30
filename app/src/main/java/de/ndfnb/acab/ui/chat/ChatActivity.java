@@ -53,7 +53,8 @@ public class ChatActivity extends AppCompatActivity implements AsyncAPIResponse,
                 }
                 //TODO thread nicht an ui element binden, app geblockt bei fail/labńger dauer
                 try {
-                    tcpClient = new ConnectionManagerTask(ChatActivity.this, getApplicationContext()).execute(route, "6969", message_input.getText().toString()).get();
+                    String message = loginRepository.getLoggedInUser().getDisplayName() + " " + message_input.getText().toString();
+                    tcpClient = new ConnectionManagerTask(ChatActivity.this, getApplicationContext()).execute(route, "6969", message).get();
                 } catch (ExecutionException | InterruptedException e) {
                     e.printStackTrace();
                 }
