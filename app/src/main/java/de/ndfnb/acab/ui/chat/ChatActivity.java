@@ -68,6 +68,9 @@ public class ChatActivity extends AppCompatActivity implements AsyncAPIResponse,
 
     private String getRoute(String name) throws ExecutionException, InterruptedException, JSONException {
         JSONObject routeJSONObject = new APITasks(ChatActivity.this).execute("get_route", loginRepository.getLoggedInUser().getJwtToken(), name).get();
+        if (routeJSONObject.getString("code") == "404") {
+            return null;
+        }
         return routeJSONObject.getJSONArray("data").getJSONObject(0).getString("route");
     }
 

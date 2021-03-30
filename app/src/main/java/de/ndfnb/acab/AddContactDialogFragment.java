@@ -1,6 +1,7 @@
 package de.ndfnb.acab;
 
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,13 +10,29 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
-import de.ndfnb.acab.data.LoginRepository;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-public class AddContactDialogFragment extends DialogFragment {
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+
+import de.ndfnb.acab.data.LoginRepository;
+import de.ndfnb.acab.tasks.APITasks;
+import de.ndfnb.acab.ui.chat.ChatActivity;
+
+public class AddContactDialogFragment extends DialogFragment implements APITasks.AsyncAPIResponse {
     private EditText mEditText;
     private LoginRepository loginRepository;
 
@@ -43,10 +60,6 @@ public class AddContactDialogFragment extends DialogFragment {
     }
 
 
-
-
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -58,7 +71,6 @@ public class AddContactDialogFragment extends DialogFragment {
         TextView nameTextView = (TextView) view.findViewById(R.id.username_input);
         Button addBtn = (Button) view.findViewById(R.id.add_contact_add_button);
         Button cancelBtn = (Button) view.findViewById(R.id.add_contact_cancel_button);
-        TextView message_input = (TextView) view.findViewById(R.id.message_input);
 
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,17 +84,61 @@ public class AddContactDialogFragment extends DialogFragment {
                 //TODO Test some methods
                 //Eingabe nehmen und ein getRoute aufrufen
                 String name = nameTextView.getText().toString();
+                try {
+                    String route = getRoute(name);
+                    if (route.equals("")) {
+                        Toast.makeText(getContext(), "Username not found", Toast.LENGTH_SHORT);
+                    } else {
+                        addFriend(name);
+                    }
+                } catch (ExecutionException | InterruptedException | JSONException | IOException e) {
+                    e.printStackTrace();
+                }
+
 
             }
+
+
         });
         return view;
     }
 
-
-    void addFriend(String name) {
-
+    private void addFriend(String name) throws IOException {
+        File dataDirectory = Environment.getDataDirectory();
+        File file = new File("data/data/de.ndfnb.acab/acab_contacts.txt");
+        if(file.exists()){
+            try {
+                BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+                bw.append(name);
+                bw.newLine();
+                bw.close();
+            } catch (IOException e) {
+                e.printStackTrace();//You'll need to add proper error handling here
+            }
+        } else {
+            file.createNewFile();
+            try {
+                BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+                bw.append(name);
+                bw.newLine();
+                bw.close();
+            } catch (IOException e) {
+                e.printStackTrace();//You'll need to add proper error handling here
+            }
+        }
     }
 
+
+    private String getRoute(String name) throws ExecutionException, InterruptedException, JSONException {
+        JSONObject routeJSONObject = new APITasks(AddContactDialogFragment.this).execute("get_route", loginRepository.getLoggedInUser().getJwtToken(), name).get();
+        if (routeJSONObject != null) {
+            if (routeJSONObject.getString("code").equals("404")) {
+                return "";
+            }
+            return routeJSONObject.getJSONArray("data").getJSONObject(0).getString("route");
+        }
+        return "";
+    }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -100,5 +156,8 @@ public class AddContactDialogFragment extends DialogFragment {
     }
 
 
-
+    @Override
+    public JSONObject processFinish(JSONObject output) {
+        return output;
+    }
 }

@@ -24,18 +24,22 @@ class ContactAdapter extends BaseAdapter {
     public ContactAdapter(Context context) {
         // TODO Auto-generated constructor stub
         this.context = context;
-        this.data = getFriends();
+        try {
+            this.data = getFriends();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-    private String[] getFriends() {
-        File sdcard = Environment.getExternalStorageDirectory();
-        File file = new File(sdcard, "contact.txt");
+    private String[] getFriends() throws IOException {
+        File dataDirectory = Environment.getDataDirectory();
+        File file = new File("data/data/de.ndfnb.acab/acab_contacts.txt");
         if (file.exists()) {
 
 
-            List<String> contactList = new ArrayList<String>();
+            List<String> contactList = new ArrayList<>();
             try {
                 BufferedReader br = new BufferedReader(new FileReader(file));
                 String line;
@@ -43,13 +47,20 @@ class ContactAdapter extends BaseAdapter {
                 while ((line = br.readLine()) != null) {
                     contactList.add(line);
                 }
+                if (contactList.size() == 0) {
+                    return new String[]{"du hast keine Freunde"};
+                }
                 br.close();
             } catch (IOException e) {
                 //You'll need to add proper error handling here
             }
-            return (String[]) contactList.toArray();
+            return contactList.toArray(new String[0]);
+        } else {
+            file.createNewFile();
+
+
         }
-        return new String[0];
+        return new String[]{"du hast keine Freunde"};
     }
 
     @Override

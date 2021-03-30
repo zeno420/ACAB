@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getBaseContext(), ChatActivity.class);
+                //TODO FIX ME
                 intent.putExtra("name", listview.getItemAtPosition(position).toString()); //)
                 intent.putExtra("loginRepository", loginRepository); //)
                 startActivity(intent);

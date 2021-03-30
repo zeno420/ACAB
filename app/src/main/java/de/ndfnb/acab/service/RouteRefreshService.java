@@ -70,6 +70,7 @@ public class RouteRefreshService extends Service implements AsyncAPIResponse {
         }
         return null;
     }
+
     private String getLocalIpV4() throws ExecutionException, InterruptedException {
         JSONObject result = new APITasks(RouteRefreshService.this).execute("get_ip").get();
         System.out.println(result);
@@ -81,7 +82,7 @@ public class RouteRefreshService extends Service implements AsyncAPIResponse {
         return null;
     }
 
-        private boolean mRun;
+    private boolean mRun;
     private AtomicBoolean working = new AtomicBoolean(true);
     private Runnable runnable = new Runnable() {
         @Override
@@ -90,8 +91,9 @@ public class RouteRefreshService extends Service implements AsyncAPIResponse {
             mRun = true;
             while (mRun) {
                 try {
-                    if (loginRepository != null) {
-                        JSONObject result = new APITasks(RouteRefreshService.this).execute("update_route", loginRepository.getLoggedInUser().getJwtToken(), getLocalIpV6()).get();
+                    String ipAdress = getLocalIpV6();
+                    if (loginRepository != null && ipAdress != null) {
+                        JSONObject result = new APITasks(RouteRefreshService.this).execute("update_route", loginRepository.getLoggedInUser().getJwtToken(), ipAdress).get();
                         System.out.println(result.toString());
                     }
                     SystemClock.sleep(30000);
