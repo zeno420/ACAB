@@ -91,7 +91,7 @@ public class RouteRefreshService extends Service implements AsyncAPIResponse {
             while (mRun) {
                 try {
                     if (loginRepository != null) {
-                        JSONObject result = new APITasks(RouteRefreshService.this).execute("update_route", loginRepository.getLoggedInUser().getJwtToken(), getLocalIpV4()).get();
+                        JSONObject result = new APITasks(RouteRefreshService.this).execute("update_route", loginRepository.getLoggedInUser().getJwtToken(), getLocalIpV6()).get();
                         System.out.println(result.toString());
                     }
                     SystemClock.sleep(30000);
