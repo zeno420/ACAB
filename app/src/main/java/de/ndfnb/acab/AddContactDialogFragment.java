@@ -13,27 +13,11 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.concurrent.ExecutionException;
-
-import de.ndfnb.acab.connection.TCPClient;
-import de.ndfnb.acab.tasks.APITasks;
-import de.ndfnb.acab.tasks.APITasks.AsyncAPIResponse;
 import de.ndfnb.acab.data.LoginRepository;
-import de.ndfnb.acab.tasks.ConnectionManagerTask;
-import de.ndfnb.acab.tasks.ConnectionManagerTask.AsyncTCPClientResponse;
-import de.ndfnb.acab.tasks.ConnectionManagerTask.*;
-import de.ndfnb.acab.ui.chat.ChatActivity;
 
-public class AddContactDialogFragment extends DialogFragment implements AsyncAPIResponse, AsyncTCPClientResponse {
+public class AddContactDialogFragment extends DialogFragment {
     private EditText mEditText;
     private LoginRepository loginRepository;
-    private ConnectionManagerTask connectionManagerTask;
-    //private JSONObject routeJSONObject;
-    private TCPClient tcpClient;
 
     public static AddContactDialogFragment newInstance(String title, LoginRepository loginRepository) {
         AddContactDialogFragment frag = new AddContactDialogFragment();
@@ -58,28 +42,16 @@ public class AddContactDialogFragment extends DialogFragment implements AsyncAPI
 
     }
 
-    /*private JSONObject getRoute(String name) throws ExecutionException, InterruptedException, JSONException {
-        this.routeJSONObject = new APITasks(AddContactDialogFragment.this).execute("get_route", loginRepository.getLoggedInUser().getJwtToken(), name).get();
-        JSONArray routeArray = this.routeJSONObject.getJSONArray("data");
-        try {
-            JSONObject routeJSONObject = routeArray.getJSONObject(0);
-        } catch (JSONException e) {
-            return null;
-        }
-        return routeJSONObject;
-    }*/
 
-    private String getRoute(String name) throws ExecutionException, InterruptedException, JSONException {
-        JSONObject routeJSONObject = new APITasks(AddContactDialogFragment.this).execute("get_route", loginRepository.getLoggedInUser().getJwtToken(), name).get();
-        return routeJSONObject.getJSONArray("data").getJSONObject(0).getString("route");
-    }
+
+
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         int width = 800;
-        int height = 800;
+        int height = 900;
         getDialog().getWindow().setLayout(width, height);
 
         View view = inflater.inflate(R.layout.add_contact_dialog_fragment, container);
@@ -100,23 +72,15 @@ public class AddContactDialogFragment extends DialogFragment implements AsyncAPI
                 //TODO Test some methods
                 //Eingabe nehmen und ein getRoute aufrufen
                 String name = nameTextView.getText().toString();
-                String jwtToken = loginRepository.getLoggedInUser().getJwtToken();
-                try {
-                    //routeJSONObject = getRoute(name);
-                    //tcpClient = new ConnectionManagerTask(AddContactDialogFragment.this, routeJSONObject.getString("route"), 6969, getContext()).execute("Now we are connected").get();
-                    String route = getRoute(name);
-                    //tcpClient = new ConnectionManagerTask(AddContactDialogFragment.this, route, 6969, getContext()).execute("Now we are connected").get();
-                    //TODO thread nicht an ui element binden, app geblockt bei fail/labńger dauer
-                    tcpClient = new ConnectionManagerTask(AddContactDialogFragment.this, getContext()).execute(route, "6969", message_input.getText().toString()).get();
 
-                    //tcpClient.sendMessage(message_input.getText().toString());
-                } catch (ExecutionException | JSONException | InterruptedException e) {
-                    e.printStackTrace();
-                }
-                //String code = result.getString("code");
             }
         });
         return view;
+    }
+
+
+    void addFriend(String name) {
+
     }
 
 
@@ -136,13 +100,5 @@ public class AddContactDialogFragment extends DialogFragment implements AsyncAPI
     }
 
 
-    @Override
-    public JSONObject processFinish(JSONObject output) {
-        return output;
-    }
 
-    @Override
-    public TCPClient processFinish(TCPClient output) {
-        return output;
-    }
 }

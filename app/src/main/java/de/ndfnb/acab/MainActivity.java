@@ -67,8 +67,7 @@ public class MainActivity extends AppCompatActivity {
             startService(routeIntent);
         }
 
-        listview.setAdapter(new ContactAdapter(this, new String[]{"zeno420",
-                "Nico", "Irgend ein Analphabet", "Damit mein ich Zeno", "LOL"}));
+        listview.setAdapter(new ContactAdapter(getBaseContext()));
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
