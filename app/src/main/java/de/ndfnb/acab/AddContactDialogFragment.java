@@ -18,10 +18,8 @@ import androidx.fragment.app.DialogFragment;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,8 +27,8 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import de.ndfnb.acab.data.LoginRepository;
+import de.ndfnb.acab.data.model.Message;
 import de.ndfnb.acab.tasks.APITasks;
-import de.ndfnb.acab.ui.chat.ChatActivity;
 
 public class AddContactDialogFragment extends DialogFragment implements APITasks.AsyncAPIResponse {
     private EditText mEditText;
@@ -126,6 +124,9 @@ public class AddContactDialogFragment extends DialogFragment implements APITasks
                 e.printStackTrace();//You'll need to add proper error handling here
             }
         }
+        List<Message> messages = new ArrayList<>();
+        ACAB.getChatListsMap().put(name, messages);
+        ACAB.getMessageAdaptersMap().put(name, new MessageAdapter(getContext(), name));
     }
 
 

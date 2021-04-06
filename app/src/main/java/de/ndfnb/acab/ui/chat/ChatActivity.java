@@ -1,8 +1,11 @@
 package de.ndfnb.acab.ui.chat;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
+import android.os.Message;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,9 +16,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import de.ndfnb.acab.ACAB;
 import de.ndfnb.acab.AddContactDialogFragment;
+import de.ndfnb.acab.MessageAdapter;
 import de.ndfnb.acab.data.LoginRepository;
 import de.ndfnb.acab.tasks.APITasks;
 import de.ndfnb.acab.tasks.ConnectionManagerTask;
@@ -29,7 +36,9 @@ public class ChatActivity extends AppCompatActivity implements AsyncAPIResponse,
     private LoginRepository loginRepository;
     private JSONObject routeJSONObject;
     private String name;
+    private ListView listview;
     private String route;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,9 +48,9 @@ public class ChatActivity extends AppCompatActivity implements AsyncAPIResponse,
         //routeJSONObject = getRoute(name);
         final TextView message_input = (TextView) findViewById(R.id.message_input);
         final Button send_message_btn = (Button) findViewById(R.id.send_message_btn);
-
-
-
+        listview = findViewById(R.id.listview_chat);
+        MessageAdapter messageAdapter = ACAB.getMessageAdaptersMap().get(name);
+        listview.setAdapter(messageAdapter);
 
         send_message_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,7 +62,8 @@ public class ChatActivity extends AppCompatActivity implements AsyncAPIResponse,
                 }
                 //TODO thread nicht an ui element binden, app geblockt bei fail/labńger dauer
                 try {
-                    String message = loginRepository.getLoggedInUser().getDisplayName() + " " + message_input.getText().toString();
+                    //TODO Name mit Doppelpunkt verbieten
+                    String message = loginRepository.getLoggedInUser().getDisplayName() + ":" + message_input.getText().toString();
                     tcpClient = new ConnectionManagerTask(ChatActivity.this, getApplicationContext()).execute(route, "6969", message).get();
                 } catch (ExecutionException | InterruptedException e) {
                     e.printStackTrace();
