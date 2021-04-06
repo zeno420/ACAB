@@ -56,15 +56,17 @@ class Handler implements Runnable {  //oder 'extends Thread'
     }  //Ende run
 
     void handleIncomingMessage(String clientMessage) {
-        String[] res = clientMessage.split(":",1);
+        try{
+        String[] res = clientMessage.split(":");
         String name = res[0];
         String message = res[1];
         Message message1 = new Message(message);
         if (ACAB.getChatListsMap().containsKey(name)) {
             ACAB.getChatListsMap().get(name).add(message1);
-            ACAB.getMessageAdaptersMap().get(name).notifyDataSetChanged();
         } else {
             //TODO keine Freunde handling
+        }} catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

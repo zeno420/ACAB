@@ -1,3 +1,5 @@
+
+
 package de.ndfnb.acab.ui.chat;
 
 import android.app.AlertDialog;
@@ -8,6 +10,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 
@@ -30,7 +33,8 @@ import de.ndfnb.acab.tasks.ConnectionManagerTask.AsyncTCPClientResponse;
 import de.ndfnb.acab.R;
 import de.ndfnb.acab.connection.TCPClient;
 import de.ndfnb.acab.tasks.APITasks.AsyncAPIResponse;
-public class ChatActivity extends AppCompatActivity implements AsyncAPIResponse, AsyncTCPClientResponse{
+
+public class ChatActivity extends AppCompatActivity implements AsyncAPIResponse, AsyncTCPClientResponse {
     private TextView mTextView;
     private TCPClient tcpClient;
     private LoginRepository loginRepository;
@@ -50,6 +54,7 @@ public class ChatActivity extends AppCompatActivity implements AsyncAPIResponse,
         final Button send_message_btn = (Button) findViewById(R.id.send_message_btn);
         listview = findViewById(R.id.listview_chat);
         MessageAdapter messageAdapter = ACAB.getMessageAdaptersMap().get(name);
+
         listview.setAdapter(messageAdapter);
 
         send_message_btn.setOnClickListener(new View.OnClickListener() {
@@ -84,6 +89,10 @@ public class ChatActivity extends AppCompatActivity implements AsyncAPIResponse,
         }
         return routeJSONObject.getJSONArray("data").getJSONObject(0).getString("route");
     }
+
+
+    //TODO
+    // ACAB.getMessageAdaptersMap().get(name).notifyDataSetChanged();
 
 
     @Override
