@@ -36,13 +36,12 @@ import java.util.Enumeration;
 
 public class MainActivity extends AppCompatActivity {
 
-
-
     ListView listview;
     LoginRepository loginRepository;
 
     //TODO chats verwerfen file löschen
     //TODO Service stoppen bei verlassen der App
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

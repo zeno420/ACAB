@@ -12,6 +12,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.databinding.ObservableArrayList;
+import androidx.databinding.ObservableList;
+
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
@@ -22,8 +25,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import de.ndfnb.acab.data.LoginRepository;
@@ -104,7 +105,7 @@ public class AddContactDialogFragment extends DialogFragment implements APITasks
     private void addFriend(String name) throws IOException {
         File dataDirectory = Environment.getDataDirectory();
         File file = new File("data/data/de.ndfnb.acab/acab_contacts.txt");
-        if(file.exists()){
+        if (file.exists()) {
             try {
                 BufferedWriter bw = new BufferedWriter(new FileWriter(file));
                 bw.append(name);
@@ -124,9 +125,9 @@ public class AddContactDialogFragment extends DialogFragment implements APITasks
                 e.printStackTrace();//You'll need to add proper error handling here
             }
         }
-        List<Message> messages = new ArrayList<>();
+        ObservableList<Message> messages = new ObservableArrayList<>();
         ACAB.getChatListsMap().put(name, messages);
-        ACAB.getMessageAdaptersMap().put(name, new MessageAdapter(getContext(), name));
+        ACAB.getMessageAdaptersMap().put(name, new MessageAdapter(getContext(), getActivity(), name));
     }
 
 

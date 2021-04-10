@@ -1,5 +1,3 @@
-
-
 package de.ndfnb.acab.ui.chat;
 
 import android.app.AlertDialog;
@@ -35,6 +33,7 @@ import de.ndfnb.acab.connection.TCPClient;
 import de.ndfnb.acab.tasks.APITasks.AsyncAPIResponse;
 
 public class ChatActivity extends AppCompatActivity implements AsyncAPIResponse, AsyncTCPClientResponse {
+
     private TextView mTextView;
     private TCPClient tcpClient;
     private LoginRepository loginRepository;
@@ -52,10 +51,12 @@ public class ChatActivity extends AppCompatActivity implements AsyncAPIResponse,
         //routeJSONObject = getRoute(name);
         final TextView message_input = (TextView) findViewById(R.id.message_input);
         final Button send_message_btn = (Button) findViewById(R.id.send_message_btn);
+
         listview = findViewById(R.id.listview_chat);
         MessageAdapter messageAdapter = ACAB.getMessageAdaptersMap().get(name);
-
         listview.setAdapter(messageAdapter);
+
+
 
         send_message_btn.setOnClickListener(new View.OnClickListener() {
             @Override
