@@ -72,43 +72,8 @@ class ContactAdapter extends BaseAdapter {
 
         this.data = list.toArray(new String[0]);
 
-        /*try {
-            this.data = getFriends();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
         inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-    }
-
-    private String[] getFriends() throws IOException {
-        File dataDirectory = Environment.getDataDirectory();
-        File file = new File("data/data/de.ndfnb.acab/acab_contacts.txt");
-        if (file.exists()) {
-
-
-            List<String> contactList = new ArrayList<>();
-            try {
-                BufferedReader br = new BufferedReader(new FileReader(file));
-                String line;
-
-                while ((line = br.readLine()) != null) {
-                    contactList.add(line);
-                }
-                if (contactList.size() == 0) {
-                    return new String[]{"du hast keine Freunde"};
-                }
-                br.close();
-            } catch (IOException e) {
-                //You'll need to add proper error handling here
-            }
-            return contactList.toArray(new String[0]);
-        } else {
-            file.createNewFile();
-
-
-        }
-        return new String[]{"du hast keine Freunde"};
     }
 
     @Override
@@ -133,10 +98,23 @@ class ContactAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         // TODO Auto-generated method stub
         View vi = convertView;
+
         if (vi == null)
             vi = inflater.inflate(R.layout.contact_row, null);
+
+        TextView header = (TextView) vi.findViewById(R.id.header);
         TextView text = (TextView) vi.findViewById(R.id.text);
-        text.setText(data[position]);
+
+        header.setText(data[position]);
+
+        //letzte nachricht anzeigen
+        List<Message> msgList = ACAB.getChatListsMap().get(data[position]);
+        String lastMsg = "";
+        if (msgList.size() != 0) {
+            lastMsg = msgList.get(msgList.size() - 1).getMessage();
+        }
+        text.setText(lastMsg);
+
         return vi;
     }
 }

@@ -21,6 +21,8 @@ public class ACAB extends Application {
 
     private static ObservableList<String> friendList = new ObservableArrayList<>();
 
+    private static ContactAdapter contactAdapter;
+
 
     public static Map<String, ObservableList<Message>> getChatListsMap() {
         return chatListsMap;
@@ -32,6 +34,14 @@ public class ACAB extends Application {
 
     public static ObservableList<String> getFriendList() {
         return friendList;
+    }
+
+    public static ContactAdapter getContactAdapter() {
+        return contactAdapter;
+    }
+
+    public static void setContactAdapter(ContactAdapter contactAdapter) {
+        ACAB.contactAdapter = contactAdapter;
     }
 
     @Override

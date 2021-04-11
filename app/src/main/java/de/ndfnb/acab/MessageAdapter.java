@@ -44,30 +44,35 @@ public class MessageAdapter extends BaseAdapter {
             public void onChanged(ObservableList<Message> sender) {
                 MessageAdapter.this.data = list.toArray(new Message[0]);
                 MessageAdapter.this.activity.runOnUiThread(MessageAdapter.super::notifyDataSetChanged);
+                MessageAdapter.this.activity.runOnUiThread(() -> ACAB.getContactAdapter().notifyDataSetChanged());
             }
 
             @Override
             public void onItemRangeChanged(ObservableList<Message> sender, int positionStart, int itemCount) {
                 MessageAdapter.this.data = list.toArray(new Message[0]);
                 MessageAdapter.this.activity.runOnUiThread(MessageAdapter.super::notifyDataSetChanged);
+                MessageAdapter.this.activity.runOnUiThread(() -> ACAB.getContactAdapter().notifyDataSetChanged());
             }
 
             @Override
             public void onItemRangeInserted(ObservableList<Message> sender, int positionStart, int itemCount) {
                 MessageAdapter.this.data = list.toArray(new Message[0]);
                 MessageAdapter.this.activity.runOnUiThread(MessageAdapter.super::notifyDataSetChanged);
+                MessageAdapter.this.activity.runOnUiThread(() -> ACAB.getContactAdapter().notifyDataSetChanged());
             }
 
             @Override
             public void onItemRangeMoved(ObservableList<Message> sender, int fromPosition, int toPosition, int itemCount) {
                 MessageAdapter.this.data = list.toArray(new Message[0]);
                 MessageAdapter.this.activity.runOnUiThread(MessageAdapter.super::notifyDataSetChanged);
+                MessageAdapter.this.activity.runOnUiThread(() -> ACAB.getContactAdapter().notifyDataSetChanged());
             }
 
             @Override
             public void onItemRangeRemoved(ObservableList<Message> sender, int positionStart, int itemCount) {
                 MessageAdapter.this.data = list.toArray(new Message[0]);
                 MessageAdapter.this.activity.runOnUiThread(MessageAdapter.super::notifyDataSetChanged);
+                MessageAdapter.this.activity.runOnUiThread(() -> ACAB.getContactAdapter().notifyDataSetChanged());
             }
         };
 

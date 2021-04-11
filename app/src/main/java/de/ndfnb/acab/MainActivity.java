@@ -68,7 +68,10 @@ public class MainActivity extends AppCompatActivity {
             startService(routeIntent);
         }
 
-        listview.setAdapter(new ContactAdapter(getBaseContext(), this));
+        ContactAdapter contactAdapter = new ContactAdapter(getBaseContext(), this);
+        ACAB.setContactAdapter(contactAdapter);
+
+        listview.setAdapter(ACAB.getContactAdapter());
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

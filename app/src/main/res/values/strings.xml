@@ -15,9 +15,9 @@
     <string name="dialog_add_contact">Enter username</string>
     <string name="add_contact_dialog_title">Add Contact</string>
     <string name="title_activity_login">LoginActivity</string>
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in or register</string>
+    <string name="prompt_email">username</string>
+    <string name="prompt_password">password</string>
+    <string name="action_sign_in">enter</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="welcome">"Welcome !"</string>
     <string name="invalid_username">Not a valid username</string>

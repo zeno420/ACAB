@@ -86,45 +86,20 @@ public class AddContactDialogFragment extends DialogFragment implements APITasks
                 try {
                     String route = getRoute(name);
                     if (route.equals("")) {
-                        Toast.makeText(getContext(), "Username not found", Toast.LENGTH_SHORT);
+                        Toast.makeText(getContext(), "Username not found", Toast.LENGTH_SHORT).show();
                     } else {
                         addFriend(name);
+                        getDialog().dismiss();
                     }
                 } catch (ExecutionException | InterruptedException | JSONException | IOException e) {
                     e.printStackTrace();
                 }
-
-
             }
-
-
         });
         return view;
     }
 
     private void addFriend(String name) throws IOException {
-        /*File dataDirectory = Environment.getDataDirectory();
-        File file = new File("data/data/de.ndfnb.acab/acab_contacts.txt");
-        if (file.exists()) {
-            try {
-                BufferedWriter bw = new BufferedWriter(new FileWriter(file));
-                bw.append(name);
-                bw.newLine();
-                bw.close();
-            } catch (IOException e) {
-                e.printStackTrace();//You'll need to add proper error handling here
-            }
-        } else {
-            file.createNewFile();
-            try {
-                BufferedWriter bw = new BufferedWriter(new FileWriter(file));
-                bw.append(name);
-                bw.newLine();
-                bw.close();
-            } catch (IOException e) {
-                e.printStackTrace();//You'll need to add proper error handling here
-            }
-        }*/
         ACAB.getFriendList().add(name);
         ObservableList<Message> messages = new ObservableArrayList<>();
         ACAB.getChatListsMap().put(name, messages);
