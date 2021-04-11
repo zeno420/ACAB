@@ -111,7 +111,7 @@ class ContactAdapter extends BaseAdapter {
         List<Message> msgList = ACAB.getChatListsMap().get(data[position]);
         String lastMsg = "";
         if (msgList.size() != 0) {
-            lastMsg = msgList.get(msgList.size() - 1).getMessage();
+            lastMsg = msgList.get(msgList.size() - 1).getDisplayedText();
         }
         text.setText(lastMsg);
 

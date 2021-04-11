@@ -29,5 +29,19 @@
     values-round/strings.xml for round devices.
     -->
     <string name="hello_world">Hello Square World!</string>
+
+    <string-array name="seconds_array">
+        <item>5 seconds</item>
+        <item>10 seconds</item>
+        <item>20 seconds</item>
+        <item>30 seconds</item>
+        <item>40 seconds</item>
+        <item>50 seconds</item>
+        <item>60 seconds</item>
+        <item>90 seconds</item>
+        <item>120 seconds</item>
+        <item>200 seconds</item>
+    </string-array>
+
     >>>>>>> Stashed changes
 </resources>

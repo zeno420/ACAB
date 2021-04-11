@@ -2,7 +2,6 @@ package de.ndfnb.acab;
 
 import android.app.Activity;
 import android.content.Context;
-import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,14 +9,6 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import androidx.databinding.ObservableList;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Observable;
 
 import de.ndfnb.acab.data.model.Message;
 
@@ -83,11 +74,6 @@ public class MessageAdapter extends BaseAdapter {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
- /*   private Message[] getMessages() throws IOException {
-       ObservableList<Message> messagesList = ACAB.getChatListsMap().get(name);
-       return messagesList.toArray(new Message[0]);
-    }*/
-
     @Override
     public int getCount() {
         // TODO Auto-generated method stub
@@ -109,11 +95,43 @@ public class MessageAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // TODO Auto-generated method stub
-        View vi = convertView;
-        if (vi == null)
-            vi = inflater.inflate(R.layout.contact_row, null);
-        TextView text = (TextView) vi.findViewById(R.id.text);
-        text.setText(data[position].getMessage());
-        return vi;
+
+        if (convertView == null)
+            convertView = inflater.inflate(R.layout.msg_row, null);
+
+        TextView textView = (TextView) convertView.findViewById(R.id.text);
+
+        textView.setText(data[position].getDisplayedText());
+        return convertView;
+    }
+
+    public Message[] getData() {
+        return data;
+    }
+
+    public ObservableList<Message> getList() {
+        return list;
+    }
+
+    public void startViewingMsg(int position, View view) {
+
+        Message currentMsg = data[position];
+        currentMsg.open();
+
+        TextView text = (TextView) view.findViewById(R.id.text);
+        text.setText(currentMsg.getDisplayedText());
+
+        Thread msgDestroyer = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    sleep(1000 * currentMsg.getSecVisible());
+                    list.remove(currentMsg);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        msgDestroyer.start();
     }
 }

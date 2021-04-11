@@ -4,25 +4,28 @@ import java.util.Date;
 
 public class Message {
     private String message;
-    private Date dateOpened;
+    private String displayedText;
+    private final int secVisible;
+
+    public Message(String message, int secVisible) {
+        this.displayedText = secVisible + " seconds available";
+        this.message = message;
+        this.secVisible = secVisible;
+    }
 
     public String getMessage() {
         return message;
     }
 
-    public Date getDateOpened() {
-        return dateOpened;
+    public int getSecVisible() {
+        return secVisible;
     }
 
-    public Message(String message) {
-        this.message = message;
+    public String getDisplayedText() {
+        return displayedText;
     }
 
     public void open() {
-
-    }
-
-    public void destroy() {
-
+        this.displayedText = this.message;
     }
 }

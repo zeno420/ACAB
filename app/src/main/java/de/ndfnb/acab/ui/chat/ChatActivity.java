@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.os.Message;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -54,21 +56,21 @@ public class ChatActivity extends AppCompatActivity implements AsyncAPIResponse,
         final TextView message_input = (TextView) findViewById(R.id.message_input);
         final Button send_message_btn = (Button) findViewById(R.id.send_message_btn);
 
+        Spinner spinner = (Spinner) findViewById(R.id.seconds_spinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.seconds_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
         listview = findViewById(R.id.listview_chat);
         MessageAdapter messageAdapter = ACAB.getMessageAdaptersMap().get(name);
         listview.setAdapter(messageAdapter);
 
-    /*    listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getBaseContext(), ChatActivity.class);
-                //TODO FIX ME
-                intent.putExtra("name", listview.getItemAtPosition(position).toString()); //)
-                intent.putExtra("loginRepository", loginRepository); //)
-                startActivity(intent);
-
+                messageAdapter.startViewingMsg(position, view);
             }
-        });*/
+        });
 
 
         send_message_btn.setOnClickListener(new View.OnClickListener() {
@@ -82,7 +84,14 @@ public class ChatActivity extends AppCompatActivity implements AsyncAPIResponse,
                 //TODO thread nicht an ui element binden, app geblockt bei fail/labńger dauer
                 try {
                     //TODO Name mit Doppelpunkt verbieten
-                    String message = loginRepository.getLoggedInUser().getDisplayName() + ":" + message_input.getText().toString();
+                    String timeString = spinner.getSelectedItem().toString();
+                    String[] timeStringSplit = timeString.split(" ");
+                    int secVisible = Integer.valueOf(timeStringSplit[0]);
+                    System.out.println(secVisible);
+
+                    String input = message_input.getText().toString();
+                    if (input == null || input.equals("")) return;
+                    String message = loginRepository.getLoggedInUser().getDisplayName() + ":" + secVisible + ":" + input;
                     tcpClient = new ConnectionManagerTask(ChatActivity.this, getApplicationContext()).execute(route, "6969", message).get();
                 } catch (ExecutionException | InterruptedException e) {
                     e.printStackTrace();
@@ -93,7 +102,6 @@ public class ChatActivity extends AppCompatActivity implements AsyncAPIResponse,
 
         getSupportActionBar().setTitle(name);
 
-
     }
 
     private String getRoute(String name) throws ExecutionException, InterruptedException, JSONException {
@@ -103,10 +111,6 @@ public class ChatActivity extends AppCompatActivity implements AsyncAPIResponse,
         }
         return routeJSONObject.getJSONArray("data").getJSONObject(0).getString("route");
     }
-
-
-    //TODO
-    // ACAB.getMessageAdaptersMap().get(name).notifyDataSetChanged();
 
 
     @Override

@@ -57,10 +57,19 @@ class Handler implements Runnable {  //oder 'extends Thread'
 
     void handleIncomingMessage(String clientMessage) {
         try{
+
         String[] res = clientMessage.split(":");
+
         String name = res[0];
-        String message = res[1];
-        Message message1 = new Message(message);
+        int secVisible = Integer.parseInt(res[1]);
+
+        StringBuilder messageText = new StringBuilder();
+        for(int i = 2; i < res.length; i++){
+            messageText.append(res[i]);
+        }
+
+        Message message1 = new Message(messageText.toString(), secVisible);
+
         if (ACAB.getChatListsMap().containsKey(name)) {
             ACAB.getChatListsMap().get(name).add(message1);
         } else {

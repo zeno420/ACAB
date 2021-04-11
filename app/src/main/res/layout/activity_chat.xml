@@ -24,8 +24,8 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:ems="10"
+        android:hint="message"
         android:inputType="textPersonName"
-        android:text="Nachricht"
         app:layout_anchorGravity="start|bottom"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/send_message_btn"
@@ -33,6 +33,12 @@
         app:layout_constraintTop_toTopOf="@+id/send_message_btn"
         tools:layout_conversion_absoluteHeight="45dp"
         tools:layout_conversion_absoluteWidth="315dp" />
+
+    <Spinner
+        android:id="@+id/seconds_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/include" />
 
     <Button
         android:id="@+id/send_message_btn"
