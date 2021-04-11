@@ -24,7 +24,6 @@ public class MessageAdapter extends BaseAdapter {
     String name;
 
     public MessageAdapter(Context context, Activity activity, String name) {
-        // TODO Auto-generated constructor stub
         this.context = context;
         this.activity = activity;
         this.name = name;
@@ -76,25 +75,21 @@ public class MessageAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        // TODO Auto-generated method stub
         return data.length;
     }
 
     @Override
     public Object getItem(int position) {
-        // TODO Auto-generated method stub
         return data[position];
     }
 
     @Override
     public long getItemId(int position) {
-        // TODO Auto-generated method stub
         return position;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        // TODO Auto-generated method stub
 
         if (convertView == null)
             convertView = inflater.inflate(R.layout.msg_row, null);

@@ -47,7 +47,6 @@ public class TCPServerService extends Service {
             mRun = true;
             try {
 
-                //TODO client seite geht erstmal; schauen warum keine verbindung zu server geht
                 serverSocket = new ServerSocket(6969);
 
                 Thread t1 = new Thread(new NetworkService(pool, serverSocket));

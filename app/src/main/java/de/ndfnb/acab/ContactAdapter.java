@@ -31,7 +31,6 @@ class ContactAdapter extends BaseAdapter {
     private static LayoutInflater inflater = null;
 
     public ContactAdapter(Context context, Activity activity) {
-        // TODO Auto-generated constructor stub
         this.context = context;
         this.activity = activity;
 
@@ -78,25 +77,22 @@ class ContactAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        // TODO Auto-generated method stub
         return data.length;
     }
 
     @Override
     public Object getItem(int position) {
-        // TODO Auto-generated method stub
         return data[position];
     }
 
     @Override
     public long getItemId(int position) {
-        // TODO Auto-generated method stub
         return position;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        // TODO Auto-generated method stub
+
         View vi = convertView;
 
         if (vi == null)

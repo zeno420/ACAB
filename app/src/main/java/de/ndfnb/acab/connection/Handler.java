@@ -35,7 +35,6 @@ class Handler implements Runnable {  //oder 'extends Thread'
             // Listen for the messages sent by the server, stopClient breaks this loop
             clientMessage = in.readLine();
             if (clientMessage != null) {
-                //TODO Message empfangen Handling
                 this.handleIncomingMessage(clientMessage);
                 System.out.println(clientMessage);
                 clientMessage = null;
@@ -73,7 +72,7 @@ class Handler implements Runnable {  //oder 'extends Thread'
         if (ACAB.getChatListsMap().containsKey(name)) {
             ACAB.getChatListsMap().get(name).add(message1);
         } else {
-            //TODO keine Freunde handling
+            //TODO msg von "unbekannt", wie wolllen wir das handlen
         }} catch (Exception e) {
             e.printStackTrace();
         }

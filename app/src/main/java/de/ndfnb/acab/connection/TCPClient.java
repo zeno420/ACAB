@@ -19,13 +19,11 @@ import de.ndfnb.acab.tasks.TCPMessageSendTask.AsyncTCPMessageResponse;
 public class TCPClient implements AsyncTCPMessageResponse {
 
     private String message;
-    //public SSLSocket socket = null;
     private String serverMessage;
     private String host;
     private int port;
     private OnMessageReceived mMessageListener = null;
     private boolean mRun = false;
-    private char[] keystorepass = "thanksmiles".toCharArray(); // If your keystore has a password, put it here
 
     private Context context;
 
@@ -54,15 +52,6 @@ public class TCPClient implements AsyncTCPMessageResponse {
         mRun = true;
 
         try {
-            //create a socket to make the connection with the server
-            KeyStore ks = KeyStore.getInstance("BKS");
-            // Load the keystore file
-            //TODO Key Store muss angelegt werden https://docs.wso2.com/display/EMM200/Generating+a+BKS+File+for+Android
-            //InputStream keyin = context.getResources().openRawResource(R.raw.client_finished);
-            //ks.load(keyin, keystorepass);
-            //TODO SSL Socket to fix
-            //SSLSocketFactory sslsocketfactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
-            //socket = (SSLSocket) sslsocketfactory.createSocket(host, port);
             Socket socket = new Socket(host, port);
             try {
 

@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
     ListView listview;
     LoginRepository loginRepository;
 
-    //TODO chats verwerfen file löschen
     //TODO Service stoppen bei verlassen der App
 
     @Override
@@ -76,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getBaseContext(), ChatActivity.class);
-                //TODO FIX ME
+                //TODO FIX ME  , ? was soll da gefixt werden?
                 intent.putExtra("name", listview.getItemAtPosition(position).toString()); //)
                 intent.putExtra("loginRepository", loginRepository); //)
                 startActivity(intent);

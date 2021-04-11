@@ -39,7 +39,7 @@ import de.ndfnb.acab.tasks.APITasks.AsyncAPIResponse;
 
 // Declare the interface. The method messageReceived(String message) will must be implemented
 // in the implementing class
-//TODO das ist ein BackgroundService um die routen immer aktuell zu halten
+// das ist ein BackgroundService um die routen immer aktuell zu halten
 public class RouteRefreshService extends Service implements AsyncAPIResponse {
     private LoginRepository loginRepository;
 

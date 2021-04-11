@@ -81,9 +81,10 @@ public class ChatActivity extends AppCompatActivity implements AsyncAPIResponse,
                 } catch (ExecutionException | InterruptedException | JSONException e) {
                     e.printStackTrace();
                 }
-                //TODO thread nicht an ui element binden, app geblockt bei fail/labńger dauer
+                //TODO senden-thread nicht an ui element binden, app geblockt bei fail/langer dauer
                 try {
                     //TODO Name mit Doppelpunkt verbieten
+                    //TODO keine nachricht senden wenn route zu alt -> nicht erreichbar
                     String timeString = spinner.getSelectedItem().toString();
                     String[] timeStringSplit = timeString.split(" ");
                     int secVisible = Integer.valueOf(timeStringSplit[0]);
