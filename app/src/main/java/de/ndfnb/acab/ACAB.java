@@ -2,6 +2,7 @@ package de.ndfnb.acab;
 
 import android.app.Application;
 
+import androidx.databinding.ObservableArrayList;
 import androidx.databinding.ObservableList;
 
 import java.util.ArrayList;
@@ -18,6 +19,8 @@ public class ACAB extends Application {
 
     private static Map<String, MessageAdapter> messageAdaptersMap = new HashMap<>();
 
+    private static ObservableList<String> friendList = new ObservableArrayList<>();
+
 
     public static Map<String, ObservableList<Message>> getChatListsMap() {
         return chatListsMap;
@@ -25,6 +28,10 @@ public class ACAB extends Application {
 
     public static Map<String, MessageAdapter> getMessageAdaptersMap() {
         return messageAdaptersMap;
+    }
+
+    public static ObservableList<String> getFriendList() {
+        return friendList;
     }
 
     @Override

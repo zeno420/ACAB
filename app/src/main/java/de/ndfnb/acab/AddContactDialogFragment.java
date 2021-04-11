@@ -103,7 +103,7 @@ public class AddContactDialogFragment extends DialogFragment implements APITasks
     }
 
     private void addFriend(String name) throws IOException {
-        File dataDirectory = Environment.getDataDirectory();
+        /*File dataDirectory = Environment.getDataDirectory();
         File file = new File("data/data/de.ndfnb.acab/acab_contacts.txt");
         if (file.exists()) {
             try {
@@ -124,7 +124,8 @@ public class AddContactDialogFragment extends DialogFragment implements APITasks
             } catch (IOException e) {
                 e.printStackTrace();//You'll need to add proper error handling here
             }
-        }
+        }*/
+        ACAB.getFriendList().add(name);
         ObservableList<Message> messages = new ObservableArrayList<>();
         ACAB.getChatListsMap().put(name, messages);
         ACAB.getMessageAdaptersMap().put(name, new MessageAdapter(getContext(), getActivity(), name));
