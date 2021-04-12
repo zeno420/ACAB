@@ -12,7 +12,7 @@
         layout="@layout/content_chat"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/message_input"
+        app:layout_constraintBottom_toTopOf="@+id/seconds_spinner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

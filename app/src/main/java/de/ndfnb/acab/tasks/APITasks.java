@@ -1,6 +1,7 @@
 package de.ndfnb.acab.tasks;
 
 import android.os.AsyncTask;
+import android.widget.Toast;
 
 
 import org.json.JSONException;
@@ -119,7 +120,6 @@ public class APITasks extends AsyncTask<String, Void, JSONObject> {
                 return result;
             }
         } else {
-            //TODO mitteilen wenn das nicht erfolgreich war
             return null;
         }
     }

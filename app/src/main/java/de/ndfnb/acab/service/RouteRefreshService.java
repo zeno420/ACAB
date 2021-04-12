@@ -7,10 +7,12 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.Parcelable;
 import android.os.SystemClock;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -41,6 +43,7 @@ import de.ndfnb.acab.tasks.APITasks.AsyncAPIResponse;
 // in the implementing class
 // das ist ein BackgroundService um die routen immer aktuell zu halten
 public class RouteRefreshService extends Service implements AsyncAPIResponse {
+
     private LoginRepository loginRepository;
 
     @Override
@@ -94,6 +97,21 @@ public class RouteRefreshService extends Service implements AsyncAPIResponse {
                     String ipAdress = getLocalIpV6();
                     if (loginRepository != null && ipAdress != null) {
                         JSONObject result = new APITasks(RouteRefreshService.this).execute("update_route", loginRepository.getLoggedInUser().getJwtToken(), ipAdress).get();
+                        String code = null;
+                        try {
+                            code = result.getString("code");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        if (code == null || !code.equals("200")) {
+                            Handler mainHandler = new Handler(getMainLooper());
+                            mainHandler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getApplicationContext(), "route not updated", Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        }
                         System.out.println(result.toString());
                     }
                     SystemClock.sleep(30000);

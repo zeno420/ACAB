@@ -1,15 +1,13 @@
 package de.ndfnb.acab;
 
 import android.app.Application;
+import android.widget.Toast;
 
 import androidx.databinding.ObservableArrayList;
 import androidx.databinding.ObservableList;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Observable;
 
 import de.ndfnb.acab.data.model.Message;
 
@@ -42,6 +40,11 @@ public class ACAB extends Application {
 
     public static void setContactAdapter(ContactAdapter contactAdapter) {
         ACAB.contactAdapter = contactAdapter;
+    }
+
+
+
+    public static void makeToast(){
     }
 
     @Override

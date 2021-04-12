@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,7 +22,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -84,7 +93,7 @@ public class ChatActivity extends AppCompatActivity implements AsyncAPIResponse,
                 //TODO senden-thread nicht an ui element binden, app geblockt bei fail/langer dauer
                 try {
                     //TODO Name mit Doppelpunkt verbieten
-                    //TODO keine nachricht senden wenn route zu alt -> nicht erreichbar
+
                     String timeString = spinner.getSelectedItem().toString();
                     String[] timeStringSplit = timeString.split(" ");
                     int secVisible = Integer.valueOf(timeStringSplit[0]);
@@ -92,6 +101,8 @@ public class ChatActivity extends AppCompatActivity implements AsyncAPIResponse,
 
                     String input = message_input.getText().toString();
                     if (input == null || input.equals("")) return;
+                    if (route == null)
+                        Toast.makeText(ChatActivity.this, "user not reachable", Toast.LENGTH_SHORT).show();
                     String message = loginRepository.getLoggedInUser().getDisplayName() + ":" + secVisible + ":" + input;
                     tcpClient = new ConnectionManagerTask(ChatActivity.this, getApplicationContext()).execute(route, "6969", message).get();
                 } catch (ExecutionException | InterruptedException e) {
@@ -110,9 +121,25 @@ public class ChatActivity extends AppCompatActivity implements AsyncAPIResponse,
         if (routeJSONObject.getString("code") == "404") {
             return null;
         }
+        String timeString = routeJSONObject.getJSONArray("data").getJSONObject(0).getString("timestamp");
+        LocalDateTime now = LocalDateTime.now().minusSeconds(35).minusHours(2);
+        LocalDateTime updateTime = convertToLocalDateTime(timeString);
+        if (updateTime.isBefore(now)) {
+            return null;
+        }
         return routeJSONObject.getJSONArray("data").getJSONObject(0).getString("route");
     }
 
+
+    private static LocalDateTime convertToLocalDateTime(String dateString) {
+
+        dateString = dateString.replaceAll("T", " ");
+        dateString = dateString.replaceAll("Z", "");
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+        return LocalDateTime.parse(dateString, formatter);
+
+    }
 
     @Override
     public JSONObject processFinish(JSONObject output) {

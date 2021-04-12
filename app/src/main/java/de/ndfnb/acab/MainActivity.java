@@ -1,5 +1,6 @@
 package de.ndfnb.acab;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.wifi.WifiManager;
 import android.os.Build;
@@ -119,6 +120,4 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
-
 }
