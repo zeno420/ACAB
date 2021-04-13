@@ -10,6 +10,7 @@ Hiermit erklären wir (Zeno Berkhan, Nico Diefenbacher), dass wir die vorliegend
 Alle sinngemäß und wörtlich übernommenen Textstellen aus fremden Quellen wurden kenntlich gemacht.
 
 == ACAB
+
 link:https://github.com/zeno420/ACAB[ACAB github repo]
 
 All Chats Are Beautiful (ACAB) ist eine Android Applikation, die einen Peer-To-Peer-Chat anbietet.
@@ -25,6 +26,7 @@ Um die Peers zueinander zu verweisen soll ein Registry Server aufgebaut werden.
 Außerdem sollen sich geschickte Nachrichten mit einer variablen Lebensdauer selbst zerstören.
 
 ==== Registry-Server
+
 link:https://github.com/zeno420/ACAB-Registry[ACAB-Registry github repo]
 
 Um die Verbindungen zwischen Peers herstellen zu können benötigen die Peers die Information, wie sie den Partner erreichen können.
@@ -141,8 +143,10 @@ Da diese Listen vom Typ ObservableList sind, passen sich alle Views bei Verände
 
 === Installation
 
-//TODO
+Copy link:https://github.com/zeno420/ACAB-Registry[this] repository to your own server, which has to have a public IPv4 address.
+Configure a nginx to forward all requests to localhost:3000 and to use a Letsencrypt cert if you want HTTPS.
+Set up a MySQL Database named acab_registry with the tables shown above.
+Create a secrets.js file and fill in all the information used from it in config.js.
+Finally register a systemd service, acab-registry.service is an example file for that in the repository.
 
-=== Betrieb
-
-//TODO
+The app can be installed on your phone easily using android-studio.
