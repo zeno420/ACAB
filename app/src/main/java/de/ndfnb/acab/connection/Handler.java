@@ -11,7 +11,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import de.ndfnb.acab.ACAB;
-import de.ndfnb.acab.data.model.Message;
+import de.ndfnb.acab.data.Message;
 
 //Thread bzw. Runnable zur Realisierung der Client-Anforderungen
 class Handler implements Runnable {  //oder 'extends Thread'

@@ -1,9 +1,6 @@
 package de.ndfnb.acab.ui.chat;
 
-import android.app.AlertDialog;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Message;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -13,34 +10,22 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
-import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import de.ndfnb.acab.ACAB;
-import de.ndfnb.acab.AddContactDialogFragment;
-import de.ndfnb.acab.MessageAdapter;
+import de.ndfnb.acab.adapter.MessageAdapter;
 import de.ndfnb.acab.data.LoginRepository;
+import de.ndfnb.acab.interfaces.AsyncTCPClientResponse;
 import de.ndfnb.acab.tasks.APITasks;
 import de.ndfnb.acab.tasks.ConnectionManagerTask;
-import de.ndfnb.acab.tasks.ConnectionManagerTask.AsyncTCPClientResponse;
 import de.ndfnb.acab.R;
 import de.ndfnb.acab.connection.TCPClient;
 import de.ndfnb.acab.tasks.APITasks.AsyncAPIResponse;

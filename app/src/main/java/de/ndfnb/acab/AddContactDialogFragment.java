@@ -1,7 +1,6 @@
 package de.ndfnb.acab;
 
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,17 +20,16 @@ import androidx.fragment.app.DialogFragment;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
+import de.ndfnb.acab.adapter.MessageAdapter;
 import de.ndfnb.acab.data.LoginRepository;
-import de.ndfnb.acab.data.model.Message;
+import de.ndfnb.acab.data.Message;
+import de.ndfnb.acab.interfaces.AsyncAPIResponse;
 import de.ndfnb.acab.tasks.APITasks;
 
-public class AddContactDialogFragment extends DialogFragment implements APITasks.AsyncAPIResponse {
+public class AddContactDialogFragment extends DialogFragment implements AsyncAPIResponse {
     private EditText mEditText;
     private LoginRepository loginRepository;
 

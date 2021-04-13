@@ -1,6 +1,5 @@
-package de.ndfnb.acab.data.model;
+package de.ndfnb.acab.data;
 
-import java.util.Date;
 
 public class Message {
     private final String message;

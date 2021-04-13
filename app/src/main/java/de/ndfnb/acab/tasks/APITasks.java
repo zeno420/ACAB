@@ -1,29 +1,21 @@
 package de.ndfnb.acab.tasks;
 
 import android.os.AsyncTask;
-import android.widget.Toast;
-
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URL;
 import java.util.Arrays;
-
 import javax.net.ssl.HttpsURLConnection;
+import de.ndfnb.acab.interfaces.AsyncAPIResponse;
 
 
 public class APITasks extends AsyncTask<String, Void, JSONObject> {
 
     public AsyncAPIResponse delegate = null;
-
-    public interface AsyncAPIResponse {
-        JSONObject processFinish(JSONObject output);
-    }
 
     public APITasks(AsyncAPIResponse delegate) {
         this.delegate = delegate;
@@ -219,7 +211,6 @@ public class APITasks extends AsyncTask<String, Void, JSONObject> {
         }
     }
 
-
     private String getIPAddr() throws IOException {
         URL url = new URL("https://api.ipify.org/");
         HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
@@ -243,6 +234,4 @@ public class APITasks extends AsyncTask<String, Void, JSONObject> {
             return null;
         }
     }
-
 }
-

@@ -1,8 +1,6 @@
 package de.ndfnb.acab;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -13,8 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 
-import android.text.format.Formatter;
-import android.util.Log;
 import android.view.View;
 
 import android.view.Menu;
@@ -22,18 +18,11 @@ import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import de.ndfnb.acab.connection.TCPClient;
+import de.ndfnb.acab.adapter.ContactAdapter;
 import de.ndfnb.acab.data.LoginRepository;
 import de.ndfnb.acab.service.RouteRefreshService;
 import de.ndfnb.acab.service.TCPServerService;
-import de.ndfnb.acab.tasks.ConnectionManagerTask;
 import de.ndfnb.acab.ui.chat.ChatActivity;
-
-import java.net.Inet6Address;
-import java.net.InetAddress;
-import java.net.InetAddress.*;
-import java.net.NetworkInterface;
-import java.util.Enumeration;
 
 public class MainActivity extends AppCompatActivity {
 

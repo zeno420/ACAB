@@ -8,7 +8,7 @@ import android.util.Patterns;
 
 import de.ndfnb.acab.data.LoginRepository;
 import de.ndfnb.acab.data.Result;
-import de.ndfnb.acab.data.model.LoggedInUser;
+import de.ndfnb.acab.data.LoggedInUser;
 import de.ndfnb.acab.R;
 
 public class LoginViewModel extends ViewModel {

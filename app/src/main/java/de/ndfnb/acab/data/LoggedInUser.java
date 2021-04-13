@@ -1,4 +1,4 @@
-package de.ndfnb.acab.data.model;
+package de.ndfnb.acab.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -14,12 +14,6 @@ public class LoggedInUser implements Parcelable {
     private String jwtToken;
     private String route;
 
-    public LoggedInUser(String userId, String displayName, String jwtToken, String route) {
-        this.userId = userId;
-        this.displayName = displayName;
-        this.jwtToken = jwtToken;
-        this.route = route;
-    }
     public LoggedInUser(String userId, String displayName, String jwtToken) {
         this.userId = userId;
         this.displayName = displayName;

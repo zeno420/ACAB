@@ -6,19 +6,16 @@ import android.os.Bundle;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.os.Parcelable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import de.ndfnb.acab.MainActivity;
 import de.ndfnb.acab.R;
 import de.ndfnb.acab.data.LoginDataSource;
 import de.ndfnb.acab.data.LoginRepository;
-import de.ndfnb.acab.data.Result;
-import de.ndfnb.acab.data.model.LoggedInUser;
+import de.ndfnb.acab.data.LoggedInUser;
 
 public class LoginActivity extends AppCompatActivity {
 

@@ -1,8 +1,7 @@
-package de.ndfnb.acab;
+package de.ndfnb.acab.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,16 +10,13 @@ import android.widget.TextView;
 
 import androidx.databinding.ObservableList;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
-import de.ndfnb.acab.data.model.Message;
+import de.ndfnb.acab.ACAB;
+import de.ndfnb.acab.R;
+import de.ndfnb.acab.data.Message;
 
-class ContactAdapter extends BaseAdapter {
+public class ContactAdapter extends BaseAdapter {
 
     Context context;
     Activity activity;

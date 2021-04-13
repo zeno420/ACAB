@@ -1,4 +1,4 @@
-package de.ndfnb.acab;
+package de.ndfnb.acab.adapter;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,7 +10,9 @@ import android.widget.TextView;
 
 import androidx.databinding.ObservableList;
 
-import de.ndfnb.acab.data.model.Message;
+import de.ndfnb.acab.ACAB;
+import de.ndfnb.acab.R;
+import de.ndfnb.acab.data.Message;
 
 public class MessageAdapter extends BaseAdapter {
 
