@@ -3,17 +3,48 @@
 :toc-placement: preamble
 :toclevels: 4
 
-TODO
-Eigenständigkeitserklärung: Hiermit erkläre ich, dass ich die vorliegende Arbeit selbstständig verfasst und keine anderen als die angegebenen Quellen und Hilfsmittel benutzt habe.Alle sinngemäß und wörtlich übernommenen Textstellen aus fremden Quellen wurden kenntlich gemacht.
+
+Eigenständigkeitserklärung: Hiermit erklären wir (Zeno Berkhan, Nico Diefenbacher), dass wir die vorliegende Arbeit selbstständig verfasst haben und keine anderen als die angegebenen Quellen und Hilfsmittel benutzt haben. Alle sinngemäß und wörtlich übernommenen Textstellen aus fremden Quellen wurden kenntlich gemacht.
 
 == ACAB
 
-All Chats Are Beautiful
+All Chats Are Beautiful (ACAB) ist eine Android Applikation, die einen Peer-To-Peer-Chat anbietet.
 
-=== Grundlagen
+TODO Beschreibung
+
+=== Verteilte-Systeme Aspekte
+
+//TODO Peer-To-Peer Nachrichtenaustausch
+//TODO Peer-To-Peer Nachrichten-Austausch
+
+=== Anforderungen
 
 TODO
 
-==== Verwendete Bibliotheken
+==== Ende-zu-Ende-Verschlüsselung
+
+TODO
+
+==== Registry-Server
+
+TODO
+
+==== IPv4 / IPv6
+
+TODO
+
+==== Selbstzerstörende Nachrichten
+
+TODO
+
+=== Installation
+
+TODO
+
+=== Betrieb
+
+TODO
+
+=== Repositories
 
 TODO
