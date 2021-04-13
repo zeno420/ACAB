@@ -36,8 +36,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import de.ndfnb.acab.R;
 import de.ndfnb.acab.data.LoginRepository;
+import de.ndfnb.acab.interfaces.AsyncAPIResponse;
 import de.ndfnb.acab.tasks.APITasks;
-import de.ndfnb.acab.tasks.APITasks.AsyncAPIResponse;
 
 // Declare the interface. The method messageReceived(String message) will must be implemented
 // in the implementing class

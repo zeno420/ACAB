@@ -3,6 +3,6 @@ package de.ndfnb.acab.interfaces;
 
 import org.json.JSONObject;
 
-interface AsyncTCPMessageResponse {
+public interface AsyncTCPMessageResponse {
     JSONObject processFinish(JSONObject output);
 }

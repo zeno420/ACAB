@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import de.ndfnb.acab.MainActivity;
+import de.ndfnb.acab.ui.main.MainActivity;
 import de.ndfnb.acab.R;
 import de.ndfnb.acab.data.LoginDataSource;
 import de.ndfnb.acab.data.LoginRepository;

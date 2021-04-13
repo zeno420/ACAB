@@ -1,4 +1,4 @@
-package de.ndfnb.acab;
+package de.ndfnb.acab.ui.main;
 
 import android.content.Intent;
 import android.os.Build;
@@ -18,11 +18,14 @@ import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import de.ndfnb.acab.ACAB;
+import de.ndfnb.acab.R;
 import de.ndfnb.acab.adapter.ContactAdapter;
 import de.ndfnb.acab.data.LoginRepository;
 import de.ndfnb.acab.service.RouteRefreshService;
 import de.ndfnb.acab.service.TCPServerService;
 import de.ndfnb.acab.ui.chat.ChatActivity;
+import de.ndfnb.acab.ui.main.AddContactDialogFragment;
 
 public class MainActivity extends AppCompatActivity {
 

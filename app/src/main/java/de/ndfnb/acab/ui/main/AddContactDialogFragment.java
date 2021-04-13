@@ -1,4 +1,4 @@
-package de.ndfnb.acab;
+package de.ndfnb.acab.ui.main;
 
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -23,6 +23,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
+import de.ndfnb.acab.ACAB;
+import de.ndfnb.acab.R;
 import de.ndfnb.acab.adapter.MessageAdapter;
 import de.ndfnb.acab.data.LoginRepository;
 import de.ndfnb.acab.data.Message;

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
+    tools:context=".ui.main.MainActivity"
     android:id="@+id/coordinatorLayout">
 
     <include
@@ -38,7 +38,7 @@
         android:id="@+id/seconds_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/include" />
+        app:layout_constraintBottom_toTopOf="@+id/message_input" />
 
     <Button
         android:id="@+id/send_message_btn"
