@@ -1,50 +1,122 @@
 = Verteilte Systeme - Dokumentation
 :toc:
 :toc-placement: preamble
-:toclevels: 4
+:toclevels: 5
 
+// attributes
+:acab: https://github.com/zeno420/ACAB
+:acab-reg: https://github.com/zeno420/ACAB-Registry
+:scsh: {acab}/doc/screenshots
 
-Eigenständigkeitserklärung: Hiermit erklären wir (Zeno Berkhan, Nico Diefenbacher), dass wir die vorliegende Arbeit selbstständig verfasst haben und keine anderen als die angegebenen Quellen und Hilfsmittel benutzt haben. Alle sinngemäß und wörtlich übernommenen Textstellen aus fremden Quellen wurden kenntlich gemacht.
+Eigenständigkeitserklärung: Hiermit erklären wir (Zeno Berkhan, Nico Diefenbacher), dass wir die vorliegende Arbeit selbstständig verfasst haben und keine anderen als die angegebenen Quellen und Hilfsmittel benutzt haben.
+Alle sinngemäß und wörtlich übernommenen Textstellen aus fremden Quellen wurden kenntlich gemacht.
 
 == ACAB
 
 All Chats Are Beautiful (ACAB) ist eine Android Applikation, die einen Peer-To-Peer-Chat anbietet.
 
-TODO Beschreibung
-
-=== Verteilte-Systeme Aspekte
-
-//TODO Peer-To-Peer Nachrichtenaustausch
-//TODO Peer-To-Peer Nachrichten-Austausch
+//TODO Beschreibung
+//TODO lizenz :  wget -O COPYING https://www.gnu.org/licenses/gpl-3.0.txt || wget -o gpl.txt https://www.gnu.org/licenses/gpl-3.0.txt
 
 === Anforderungen
 
-TODO
+Die wichtigste Anforderungen an die Applikation ist per Peer2Peer Connection zu kommunizieren.
+Die Kommunikation und die kommunizierten Nachrichten selbst sollen Ende zu Ende verschlüsselt sein.
+Um die Peers zueinander zu verweisen soll ein Registry Server aufgebaut werden.
+Außerdem sollen sich geschickte Nachrichten mit einer variablen Lebensdauer selbst zerstören.
+
+//TODO 8 - 21h je person
+
+==== Registry-Server
+//TODO link zu repo
+
+Um die Verbindungen zwischen Peers herstellen zu können benötigen die Peers die Information, wie sie den Partner erreichen können.
+Diese Informationen sollen die Peers über einen dedizierten Server erhalten.
+Der Server ist für die Userverwaltung, also Authentifizierung, und die vermittlung von Routeninformation zuständig.
+
+===== Datenbank
+//TODO datenbankschema
+
+Für die Routen- und Userverwaltung läuft eine einfache MySQL Instanz.
+Folgende drei Tabellen werden benutzt.
+
+.members Tabelle
+[source,sql]
+CREATE TABLE `members` (
+`name` varchar(42) NOT NULL,
+`passwd` varchar(255) DEFAULT NULL,
+PRIMARY KEY (`name`)
+)
+
+.routes Tabelle
+[source,sql]
+CREATE TABLE `routes` (
+`route` varchar(42) DEFAULT NULL,
+`name` varchar(42) NOT NULL,
+`timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+PRIMARY KEY (`name`),
+CONSTRAINT `routes_ibfk_1` FOREIGN KEY (`name`) REFERENCES `members` (`name`)
+)
+
+.admins Tabelle
+[source,sql]
+CREATE TABLE `admins` (
+  `name` varchar(42) NOT NULL,
+  `bla` varchar(42) DEFAULT NULL,
+  PRIMARY KEY (`name`),
+  CONSTRAINT `admins_ibfk_1` FOREIGN KEY (`name`) REFERENCES `members` (`name`)
+)
+
+===== REST API
+//TODO nginx reverse proxy ssl
+
+.index.js
+image:{scsh}/indexjs.png[]
+
+//TODO javascript
+
+Anfragen an den Server werden per REST-API verwirklicht. Für diese API wurde ein kleiner Service in NodeJS geschrieben.
+
+
+//TODO rest api doku
+
+===== systemd
+//TODO systemd service
+
+==== Peer2Peer
+
+//TODO Peer-To-Peer Nachrichtenaustausch
 
 ==== Ende-zu-Ende-Verschlüsselung
 
-TODO
+//TODO eigene ca nötig bei p2p
+//TODO ohne verschlüsselung poc
 
-==== Registry-Server
-
-TODO
 
 ==== IPv4 / IPv6
 
-TODO
+//TODO nur internes netz möglich stand jz
+//TODO für ipv4 ipv6 gemischt und öffenltiche netze turn server impementieren
 
 ==== Selbstzerstörende Nachrichten
 
-TODO
+//TODO sender username + secondsAvailable vor nachrichten text hängen
+//TODO lösch logik in app bei client, zeit startet nach anklicken der nachricht
+
+=== Applikation
+//TODO nachricht senden, zeit wählen
+//TODO nachricht ansehen, zerstören
+//TODO route refreshen von client
+//TODO wenn route zu alt beim senden -> nicht erreichbar
 
 === Installation
 
-TODO
+//TODO
 
 === Betrieb
 
-TODO
+//TODO
 
 === Repositories
 
-TODO
+//TODO
