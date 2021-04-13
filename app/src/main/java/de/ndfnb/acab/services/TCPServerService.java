@@ -1,4 +1,4 @@
-package de.ndfnb.acab.service;
+package de.ndfnb.acab.services;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -19,7 +19,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import de.ndfnb.acab.R;
-import de.ndfnb.acab.connection.NetworkService;
+import de.ndfnb.acab.connections.ServerNetworkPool;
 import de.ndfnb.acab.data.LoginRepository;
 
 public class TCPServerService extends Service {
@@ -38,7 +38,7 @@ public class TCPServerService extends Service {
             mRun = true;
             try {
                 serverSocket = new ServerSocket(6969);
-                Thread t1 = new Thread(new NetworkService(pool, serverSocket));
+                Thread t1 = new Thread(new ServerNetworkPool(pool, serverSocket));
                 t1.start();
             } catch (IOException e) {
                 e.printStackTrace();

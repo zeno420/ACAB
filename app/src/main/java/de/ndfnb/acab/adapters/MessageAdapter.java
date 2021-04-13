@@ -1,4 +1,4 @@
-package de.ndfnb.acab.adapter;
+package de.ndfnb.acab.adapters;
 
 import android.app.Activity;
 import android.content.Context;

@@ -1,4 +1,4 @@
-package de.ndfnb.acab.service;
+package de.ndfnb.acab.services;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.Parcelable;
 import android.os.SystemClock;
 import android.util.Log;
 import android.widget.Toast;
@@ -19,16 +18,9 @@ import androidx.annotation.Nullable;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Enumeration;
 import java.util.concurrent.ExecutionException;

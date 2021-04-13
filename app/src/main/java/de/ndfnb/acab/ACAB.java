@@ -8,8 +8,8 @@ import androidx.databinding.ObservableList;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.ndfnb.acab.adapter.ContactAdapter;
-import de.ndfnb.acab.adapter.MessageAdapter;
+import de.ndfnb.acab.adapters.ContactAdapter;
+import de.ndfnb.acab.adapters.MessageAdapter;
 import de.ndfnb.acab.data.Message;
 
 public class ACAB extends Application {

@@ -1,4 +1,4 @@
-package de.ndfnb.acab.connection;
+package de.ndfnb.acab.connections;
 
 import org.json.JSONObject;
 import java.io.BufferedReader;

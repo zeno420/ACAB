@@ -2,7 +2,7 @@ package de.ndfnb.acab.tasks;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import de.ndfnb.acab.connection.TCPClient;
+import de.ndfnb.acab.connections.TCPClient;
 import de.ndfnb.acab.interfaces.AsyncTCPClientResponse;
 
 

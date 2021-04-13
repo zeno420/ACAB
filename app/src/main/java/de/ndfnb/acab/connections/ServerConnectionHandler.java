@@ -1,4 +1,4 @@
-package de.ndfnb.acab.connection;
+package de.ndfnb.acab.connections;
 
 
 import java.io.BufferedReader;
@@ -14,14 +14,14 @@ import de.ndfnb.acab.ACAB;
 import de.ndfnb.acab.data.Message;
 
 //Thread bzw. Runnable zur Realisierung der Client-Anforderungen
-class Handler implements Runnable {  //oder 'extends Thread'
+class ServerConnectionHandler implements Runnable {  //oder 'extends Thread'
     private final Socket client;
     private final ServerSocket serverSocket;
     private PrintWriter out;
     private BufferedReader in;
     private String clientMessage;
 
-    Handler(ServerSocket serverSocket, Socket client) { //Server/Client-Socket
+    ServerConnectionHandler(ServerSocket serverSocket, Socket client) { //Server/Client-Socket
         this.client = client;
         this.serverSocket = serverSocket;
     }

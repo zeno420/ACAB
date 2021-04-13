@@ -21,14 +21,14 @@ import java.time.format.DateTimeFormatter;
 import java.util.concurrent.ExecutionException;
 
 import de.ndfnb.acab.ACAB;
-import de.ndfnb.acab.adapter.MessageAdapter;
+import de.ndfnb.acab.adapters.MessageAdapter;
 import de.ndfnb.acab.data.LoginRepository;
 import de.ndfnb.acab.interfaces.AsyncAPIResponse;
 import de.ndfnb.acab.interfaces.AsyncTCPClientResponse;
 import de.ndfnb.acab.tasks.APITasks;
 import de.ndfnb.acab.tasks.ConnectionManagerTask;
 import de.ndfnb.acab.R;
-import de.ndfnb.acab.connection.TCPClient;
+import de.ndfnb.acab.connections.TCPClient;
 
 public class ChatActivity extends AppCompatActivity implements AsyncAPIResponse, AsyncTCPClientResponse {
 

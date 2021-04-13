@@ -20,11 +20,11 @@
         android:theme="@style/Theme.ACAB">
 
         <service
-            android:name=".service.TCPServerService"
+            android:name=".services.TCPServerService"
             android:enabled="true"
             android:exported="false" />
         <service
-            android:name=".service.RouteRefreshService"
+            android:name=".services.RouteRefreshService"
             android:enabled="true"
             android:exported="false" />
 
