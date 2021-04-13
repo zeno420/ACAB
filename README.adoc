@@ -1,1 +1,19 @@
+= Verteilte Systeme - Dokumentation
+:toc:
+:toc-placement: preamble
+:toclevels: 4
 
+TODO
+Eigenständigkeitserklärung: Hiermit erkläre ich, dass ich die vorliegende Arbeit selbstständig verfasst und keine anderen als die angegebenen Quellen und Hilfsmittel benutzt habe.Alle sinngemäß und wörtlich übernommenen Textstellen aus fremden Quellen wurden kenntlich gemacht.
+
+== ACAB
+
+All Chats Are Beautiful
+
+=== Grundlagen
+
+TODO
+
+==== Verwendete Bibliotheken
+
+TODO
