@@ -13,7 +13,7 @@ Alle sinngemäß und wörtlich übernommenen Textstellen aus fremden Quellen wur
 
 link:https://github.com/zeno420/ACAB[ACAB github repo]
 
-All Chats Are Beautiful (ACAB) ist eine Android Applikation, die einen Peer-To-Peer-Chat anbietet.
+All Chats Are Beautiful (ACAB) ist eine Android Applikation, die einen Peer2Peer-Chat anbietet.
 
 //TODO Beschreibung
 //TODO 8 - 21h je person
@@ -22,16 +22,16 @@ All Chats Are Beautiful (ACAB) ist eine Android Applikation, die einen Peer-To-P
 
 Die wichtigste Anforderungen an die Applikation ist per Peer2Peer Connection zu kommunizieren.
 Die Kommunikation und die kommunizierten Nachrichten selbst sollen Ende zu Ende verschlüsselt sein.
-Um die Peers zueinander zu verweisen soll ein Registry Server aufgebaut werden.
-Außerdem sollen sich geschickte Nachrichten mit einer variablen Lebensdauer selbst zerstören.
+Um die Peers zueinander zu verweisen soll ein Registryserver aufgebaut werden.
+Außerdem sollen sich geschickte Nachrichten, mit einer variablen Lebensdauer, selbst zerstören.
 
-==== Registry-Server
+==== Registryserver
 
 link:https://github.com/zeno420/ACAB-Registry[ACAB-Registry github repo]
 
-Um die Verbindungen zwischen Peers herstellen zu können benötigen die Peers die Information, wie sie den Partner erreichen können.
-Diese Informationen sollen die Peers über einen dedizierten Server erhalten.
-Der Server ist für die Userverwaltung, also Authentifizierung, und die vermittlung von Routeninformation zuständig.
+Um die Verbindungen zwischen Peers herstellen zu können, benötigen die Peers die Information, wie sie den Partner erreichen können.
+Diese Information sollen die Peers über einen dedizierten Server erhalten.
+Der Server ist für die Userverwaltung, also Authentifizierung, und die Vermittlung von Routeninformation zuständig.
 
 ===== Datenbank
 
@@ -67,23 +67,23 @@ CREATE TABLE `admins` (
 
 ===== REST API
 
-Anfragen an den Server werden per REST-API verwirklicht.
-Für diese API wurde ein kleiner Service in NodeJS geschrieben.
+Anfragen an den Server werden per REST API verwirklicht.
+Für diese API wurde ein kleiner Service in Node.js geschrieben.
 Dieser Service ist nur intern (localhost:3000) erreichbar.
-Um ihn von außsen zu erreichen und im gleichen zu HTTPS zu ermöglichen nutzen wir einen nginx als Reverseproxy und certbot für die automatische Zertifikatsverwaltung mit LetsEncrypt.
+Um ihn von außen zu erreichen und im gleichen Zug HTTPS zu ermöglichen, nutzen wir einen nginx Webserver als Reverseproxy und certbot für die automatische Zertifikatsverwaltung mit Let’s Encrypt Zertifikaten.
 
-Der Einstiegspunkt ist das File index.js.
-Dieses verteilt Anfragen auf die entsprechendend Files (routes/auth.js oder routes/registry.js).
+Der Einstiegspunkt ist das File `index.js`.
+Dieses verteilt Anfragen auf die entsprechenden Files (`routes/auth.js` oder `routes/registry.js`).
 
 .index.js
 image::{scsh}/indexjs.png[index.js]
 
-Als beispiel: routes/auth.js nimmt anfragen gegen <url>/auth/signin an und ruft dann die signin funktion in services/auth.js auf.
+Als Beispiel: `routes/auth.js` nimmt anfragen gegen _<url>/auth/signin_ an und ruft dann die *signin* funktion in `services/auth.js` auf.
 
 .routes/auth.js
 image::{scsh}/routesauthjs.png[routes/auth.js]
 
-In services/auth.js und services/registry.js befinden sich alle Funktionen und Hilfsfunktionen die verwednet werden.
+In `services/auth.js` und `services/registry.js` befinden sich alle Funktionen und Hilfsfunktionen die verwendet werden.
 
 .services/auth.js
 image::{scsh}/servicesauthjs.png[services/auth.js]
@@ -91,61 +91,62 @@ image::{scsh}/servicesauthjs.png[services/auth.js]
 Wir liefern im Body der Antwort noch einen eigenen Statuscode mit, der Information über den Erfolg einer Aktion liefert.
 Folgende API Requests werden unterstützt:
 
-.GET: <url>/registry?name=<username>
-Liefert die Route zu <username>, falls vorhanden, zurück.
+.GET: _<url>/registry?name=<username>_
+Liefert die Route zu _<username>_, falls vorhanden, zurück.
 
-.PUT: <url>/registry - header: {"x-access-token"} - body: {"route": "<route>"}
+.PUT: _<url>/registry_ - header: {"x-access-token"} - body: {"route": "<route>"}
 Setzt die eigene Route in der Datenbank auf den im Body übergebenen (neuen) Wert und erneuert den Timestamp der Datenbankzeile.
 Nur bei erfolgreicher Authentifizierung mit x-access-token im Header.
 
-.POST: <url>/registry - header: {"x-access-token"} - body: {"name": "<username>", "passwd":"<password>"}
-Erzeugt einen neuen User mit <username> und <password>.
-Dafür wird ein Eintrag in der members Tabelle erzeugt. <password> wird dabei gesalted gehasht abgelegt.
-Nur bei erfolgreicher Authentifizierung mit x-access-token im Header und einem Eintrag in der admins Tabelle für dieses Token.
+.POST: _<url>/registry_ - header: {"x-access-token"} - body: {"name": "<username>", "passwd":"<password>"}
+Erzeugt einen neuen User mit _<username>_ und _<password>_.
+Dafür wird ein Eintrag in der members Tabelle erzeugt. _<password>_ wird dabei salted gehashed abgelegt.
+Nur bei erfolgreicher Authentifizierung mit _x-access-token_ im Header und einem Eintrag in der admins Tabelle für dieses Token.
 
-.POST: <url>/auth/signin - body: {"name": "<username>", "passwd":"<password>"}
-Prüft gegen die Datenbank ob dieser User mit dem Passwort existiert.
+.POST: _<url>/auth/signin_ - body: {"name": "<username>", "passwd":"<password>"}
+Prüft gegen die Datenbank, ob dieser User mit dem Passwort existiert.
 Ist das der Fall bekommt der User in der Antwort ein Token zur zukünftigen Authentifizierung.
 
 ===== systemd
 
-Damit der NodeJS Server immer läuft, auch nach einem Reboot des Hardwareservers, wurde ein link:https://github.com/zeno420/ACAB-Registry/blob/main/acab-registry.service[systemd service file] geschrieben.
+Damit der Node.js Server immer läuft, auch nach einem Reboot des Hardwareservers, wurde ein link:https://github.com/zeno420/ACAB-Registry/blob/main/acab-registry.service[systemd service file] geschrieben.
 
 ==== Peer2Peer
 
 Die Anforderung Nachrichten Peer2Peer zu versenden wird umgesetzt, indem ein Client vor dem Versenden einer Nachricht beim Registryserver die Route des Empfängers erfragt, prüft ob der zugehörige Timestamp aktuell genug ist und dann eine direkte TCP Verbindung zu dem Empfänger aufbaut.
 Auf jedem Gerät läuft ein Service, welcher einen TCP Server Socket realisiert, der mehrere Verbindungen annehmen kann.
-Ein weiterer Service sorgt dafür alle 30 Sekunden die aktuelle IPv6 Addresse des Gerätes an den Registryserver zu propagieren.
+Ein weiterer Service sorgt dafür alle 30 Sekunden die aktuelle IPv6 Adresse des Gerätes an den Registryserver zu propagieren.
 
-==== Ende-zu-Ende-Verschlüsselung
+==== Ende zu Ende Verschlüsselung
 
-Um beim direkten P2P Ende zu Ende Verschlüsselung umzusetzen würde eine eigen CA benötigt.
-Diese Erkenntnis (und andere Implementierungsschritte) haben uns so viel Zeit gebraucht, dass wir davon abgesehen haben es zu implementieren.
-Bei Verwendung eines TURN Servers (mehr dazu im Kapitel IPv4 / IPv6) wäre die Kommunikation quasi automatisch Verschlüsselt (TCP Server - Client), nur der Nachrichten Inhalt bedarüfte dann noch eines gesonderten Schrittes.
+Um bei Peer2Peer Ende zu Ende Verschlüsselung umzusetzen, würde eine eigene CA benötigt.
+Diese Erkenntnis (und andere Implementierungsschritte) haben uns so viel Zeit gebraucht, dass wir davon abgesehen haben es umzusetzen.
+Bei Verwendung eines TURN Servers (mehr dazu im Kapitel IPv4 / IPv6) wäre die Kommunikation quasi automatisch Verschlüsselt (TCP Server - Client Verbindungen), nur der Nachrichteninhalt bedürfte dann noch eines gesonderten Vorgehen.
 
 ==== IPv4 / IPv6
 
-Zum Stand der Abgabe sind nur IPv6 Verbindungen in gleichen Netz möglich.
-Um die Kompatibilität zwischen IPv4 und IPv6 Geräten, sowie zwischen Netzen (wegen NAT u.ä.) zu realisieren sollte ein TURN Server (oder ein TURN artiger Server) zu Hilfe gezogen werden (oooder TOR ;) ).
+Zum Stand der Abgabe sind nur IPv6 Verbindungen in gemeinsamen Netzen möglich.
+Um die Kompatibilität zwischen IPv4 und IPv6 Adressen, sowie zwischen fremden Netzen (wegen NAT u.ä.) zu realisieren, sollte ein TURN Server (oder ein TURNartiger Server) zu Hilfe gezogen werden (oooder TOR ;) ).
 
 ==== Selbstzerstörende Nachrichten
 
-Empfangene Nachrichten sind Strings nach dem Schema <username>:<secVisible>:<actualMsgText> (Namen mit Doppelpunkten müssen noch verboten werden :D).
+Empfangene Nachrichten sind Strings nach dem Schema *<username>:<secVisible>:<actualMsgText>* (Namen mit Doppelpunkten müssen noch verboten werden :D).
 Zuerst wird der Name extrahiert, um die Nachricht dem Richtigen Absender zuzuordnen und in die entsprechende Nachrichtenliste einzutragen.
-Vor dem Absenden einer Nachricht kann in einem Dropdown Menu eine Zeit in Sekunden gewählt werden, die eine Nachricht beim Empfänger sichtbar sein soll.
-Der gewählte Wert steht an der Stelle <secVisible> und wird beim empfänger extrahiert.
-Das beim Empfänger, für eine empfangene Nachricht erzeugte Message Objekt hat ein Member "displayed Text", der zunächst auf die Zeit + " seconds available" gesetzt wird.
+Vor dem Absenden einer Nachricht kann in einem Dropdownmenü eine Zeit in Sekunden gewählt werden, die eine Nachricht beim Empfänger sichtbar sein soll.
+Der gewählte Wert steht an der Stelle *<secVisible>* und wird beim Empfänger extrahiert.
+Das beim Empfänger, für eine empfangene Nachricht, erzeugte Message Objekt hat ein Member *displayedText*, der zunächst auf _**secVisible** seconds available_ gesetzt wird.
 Aus einer Liste solcher Message Objekte wird die ListView im Chat mit einer Person erzeugt.
 Jedes Element erhält einen OnClickedListener().
-Dieser bewirkt beim klicken eines Elements, also einer Nachricht, dass auf dieser Message open() aufegrufen wird. open() seztzt displayedText auf den tatsächlichen Nachrichtentext.
-Anschließend wird ein Thread gestarten, der die spezifizierte Zeit schläft und dann die Message aus der Lsite entfernt.
-Da diese Listen vom Typ ObservableList sind, passen sich alle Views bei Veränderung der Liste autmatisch an, die Nachricht verschwindet also wenn sie aus der Liste entfert wurde.
+Dieser bewirkt beim Klicken eines Elements, also einer Nachricht, dass auf dieser Message *open()* aufgerufen wird. *open()* setzt *displayedText* auf den tatsächlichen Nachrichtentext.
+Anschließend wird ein Thread gestartet, der die vorgegebene Zeit schläft und danach die Message aus der Liste entfernt.
+Da diese Listen vom Typ ObservableList sind, passen sich alle Views bei Veränderungen der Liste automatisch an.
+Die Nachricht verschwindet also aus dem Chat, wenn sie aus der Liste entfernt wurde.
 
 === Installation
 
-Copy link:https://github.com/zeno420/ACAB-Registry[this] repository to your own server, which has to have a public IPv4 address.
-Configure a nginx to forward all requests to localhost:3000 and to use a Letsencrypt cert if you want HTTPS.
-Set up a MySQL Database named acab_registry with the tables shown above.
+Copy link:https://github.com/zeno420/ACAB-Registry[this repository] to your own server, which has to have a public IPv4 address.
+Configure a nginx to forward all requests to localhost:3000 and to use a Let’s Encrypt certificate if you want to use HTTPS.
+Set up a MySQL database named acab_registry with the tables described above.
 Create a secrets.js file and fill in all the information used from it in config.js.
 Finally register a systemd service, acab-registry.service is an example file for that in the repository.
 
