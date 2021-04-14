@@ -127,7 +127,7 @@ Bei Verwendung eines TURN Servers (mehr dazu im Kapitel IPv4 / IPv6) wäre die K
 ==== IPv4 / IPv6
 
 Zum Stand der Abgabe sind nur IPv6 Verbindungen in gemeinsamen Netzen möglich.
-Um die Kompatibilität zwischen IPv4 und IPv6 Adressen, sowie zwischen fremden Netzen (wegen NAT u.ä.) zu realisieren, sollte ein TURN Server (oder ein TURNartiger Server) zu Hilfe gezogen werden (oooder TOR ;) ).
+Um die Kompatibilität zwischen IPv4 und IPv6 Adressen, sowie zwischen fremden Netzen (wegen NAT u.ä.) zu realisieren, sollte ein TURN Server (oder ein TURN-artiger Server) zu Hilfe gezogen werden (oder TOR ;) ).
 
 ==== Selbstzerstörende Nachrichten
 
