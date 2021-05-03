@@ -16,8 +16,6 @@ link:https://github.com/zeno420/ACAB[ACAB github repo]
 All Chats Are Beautiful (ACAB) ist eine Android Applikation, die einen Peer2Peer-Chat anbietet.
 
 //TODO Beschreibung
-//TODO 8 - 21h je person
-//TODO demo video?
 
 === Anforderungen
 
